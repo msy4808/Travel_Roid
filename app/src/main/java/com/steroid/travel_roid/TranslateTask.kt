@@ -2,7 +2,6 @@ package com.steroid.travel_roid
 
 import android.os.AsyncTask
 import android.util.Log
-import android.widget.Toast
 import com.google.gson.JsonElement
 import com.google.gson.JsonParser
 import java.io.*
@@ -12,12 +11,23 @@ import java.net.MalformedURLException
 import java.net.URL
 import java.net.URLEncoder
 
+val clientId = "Ge3xCYIlR7pE8p7yNiVe"
+val clientSercret = "cP885YoL58"
+
+fun connect(apiURL: String): HttpURLConnection {
+    return try {
+        val url = URL(apiURL)
+        (url.openConnection() as HttpURLConnection)
+    }catch (e: MalformedURLException){
+        throw RuntimeException("API URL 오류", e)
+    }catch (e: IOException) {
+        throw RuntimeException("연결 실패",e)
+    }
+}
+
 class TranslateTask(translationText:String) : AsyncTask<String, Void, String> (){
     var translationText = translationText
     override fun doInBackground(vararg p0: String?): String {
-        val clientId = "Ge3xCYIlR7pE8p7yNiVe"
-        val clientSercret = "cP885YoL58"
-
         val apiURL = "https://openapi.naver.com/v1/papago/n2mt"
         var text: String = translationText
         text = try {
@@ -29,16 +39,7 @@ class TranslateTask(translationText:String) : AsyncTask<String, Void, String> ()
         requestHeaders["X-Naver-Client-Id"] = clientId
         requestHeaders["X-Naver-Client-Secret"] = clientSercret
 
-        fun connect(apiURL: String): HttpURLConnection {
-            return try {
-                val url = URL(apiURL)
-                (url.openConnection() as HttpURLConnection)
-            }catch (e: MalformedURLException){
-                throw RuntimeException("API URL 오류", e)
-            }catch (e: IOException) {
-                throw RuntimeException("연결 실패",e)
-            }
-        }
+
 
         fun readBody(body: InputStream): String {
             val streamReader = InputStreamReader(body);
