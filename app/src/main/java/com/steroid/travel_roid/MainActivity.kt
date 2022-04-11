@@ -25,7 +25,7 @@ class MainActivity : AppCompatActivity() {
         val outSpinner: Spinner = findViewById(R.id.langTag) //spinner 메뉴
         val targetSpinner: Spinner = findViewById(R.id.langTag2)
 
-        val handler = object:Handler(Looper.getMainLooper()){
+        val handler = object:Handler(Looper.getMainLooper()){ //감지된 언어코드로 Spinner를 변경해주기 위해 핸들러 사용
             override fun handleMessage(msg: Message) {
                 when(msg.what){
                     0 -> {
@@ -93,8 +93,7 @@ class MainActivity : AppCompatActivity() {
 
         //spinner 리스너 설정
         outSpinner.onItemSelectedListener = object: AdapterView.OnItemSelectedListener {
-            //클릭했을때 언어코드 전달해줘야함
-            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) { //감지가 아니라 직접 선택해도 전달되게 ... 우선 만들어놈
                 when(position) {
                     0 -> {
                         autoLangCode = "ko"
@@ -159,7 +158,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         targetSpinner.onItemSelectedListener = object: AdapterView.OnItemSelectedListener {
-            //클릭했을때 언어코드 전달해줘야함
+            //Spinner에서 선택한 target 언어코드를 langCode에 저장하는 코드
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                 when(position) {
                     0 -> {
@@ -231,13 +230,13 @@ class MainActivity : AppCompatActivity() {
             override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
             }
 
-            override fun afterTextChanged(p0: Editable?) {
+            override fun afterTextChanged(p0: Editable?) { //텍스트가 입력되면 동작함 <- 입력된 텍스트를 String으로 받아 DetectLangs클래스로 넘겨줌
                 val timer = Timer()
                 timer.schedule(object: TimerTask(){
                     override fun run() {
                         val detectLangs = DetectLangs(p0.toString())
                         autoLangCode = detectLangs.getlangCode()
-                        when(autoLangCode){
+                        when(autoLangCode){ //감지된 언어코드에 따라 핸들러에 msg로 넘겨줌
                             "ko" -> {
                                 handler.sendEmptyMessage(0)
                             }
@@ -299,10 +298,10 @@ class MainActivity : AppCompatActivity() {
         }
 
         btn.setOnClickListener {
-                val translate = TranslateTask(userEnterText.text.toString(), autoLangCode, langCode)
+                val translate = TranslateTask(userEnterText.text.toString(), autoLangCode, langCode) //텍스트와 두가지의 언어코드를 파라미터로 보냄
                 result.text = translate.execute().get()
         }
 
-        userEnterText.addTextChangedListener(textWatcher)
+        userEnterText.addTextChangedListener(textWatcher) //editText에텍스트가 입력되면 동작하는 리스너를 연결
     }
 }
