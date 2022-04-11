@@ -2,6 +2,9 @@ package com.steroid.travel_roid
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
+import android.os.Message
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
@@ -13,7 +16,6 @@ import java.util.*
 class MainActivity : AppCompatActivity() {
     var langCode = ""
     var autoLangCode = ""
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -21,12 +23,142 @@ class MainActivity : AppCompatActivity() {
         val btn: Button = findViewById<Button>(R.id.btn)
         val result: TextView = findViewById(R.id.result)
         val outSpinner: Spinner = findViewById(R.id.langTag) //spinner 메뉴
+        val targetSpinner: Spinner = findViewById(R.id.langTag2)
+
+        val handler = object:Handler(Looper.getMainLooper()){
+            override fun handleMessage(msg: Message) {
+                when(msg.what){
+                    0 -> {
+                        outSpinner.setSelection(0)
+                    }
+                    1 -> {
+                        outSpinner.setSelection(1)
+                    }
+                    2 -> {
+                        outSpinner.setSelection(2)
+                    }
+                    3 -> {
+                        outSpinner.setSelection(3)
+                    }
+                    4 -> {
+                        outSpinner.setSelection(4)
+                    }
+                    5 -> {
+                        outSpinner.setSelection(5)
+                    }
+                    6 -> {
+                        outSpinner.setSelection(6)
+                    }
+                    7 -> {
+                        outSpinner.setSelection(7)
+                    }
+                    8 -> {
+                        outSpinner.setSelection(8)
+                    }
+                    9 -> {
+                        outSpinner.setSelection(9)
+                    }
+                    10 -> {
+                        outSpinner.setSelection(10)
+                    }
+                    11 -> {
+                        outSpinner.setSelection(11)
+                    }
+                    12 -> {
+                        outSpinner.setSelection(12)
+                    }
+                    13 -> {
+                        outSpinner.setSelection(13)
+                    }
+                    14 -> {
+                        outSpinner.setSelection(14)
+                    }
+                    15 -> {
+                        outSpinner.setSelection(15)
+                    }
+                    16 -> {
+                        outSpinner.setSelection(16)
+                    }
+                    17 -> {
+                        outSpinner.setSelection(17)
+                    }
+                }
+            }
+        }
+
 
         //spinner 메뉴 어댑터 연결
         outSpinner.adapter = ArrayAdapter.createFromResource(this, R.array.langList, android.R.layout.simple_spinner_item)
+        targetSpinner.adapter = ArrayAdapter.createFromResource(this, R.array.langList, android.R.layout.simple_spinner_item)
 
         //spinner 리스너 설정
         outSpinner.onItemSelectedListener = object: AdapterView.OnItemSelectedListener {
+            //클릭했을때 언어코드 전달해줘야함
+            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                when(position) {
+                    0 -> {
+                        autoLangCode = "ko"
+                    }
+                    1 -> {
+                        autoLangCode = "ja"
+                    }
+                    2 -> {
+                        autoLangCode = "zh-CN"
+                    }
+                    3 -> {
+                        autoLangCode = "zh-TW"
+                    }
+                    4 -> {
+                        autoLangCode = "hi"
+                    }
+                    5 -> {
+                        autoLangCode = "en"
+                    }
+                    6 -> {
+                        autoLangCode = "es"
+                    }
+                    7 -> {
+                        autoLangCode = "fr"
+                    }
+                    8 -> {
+                        autoLangCode = "de"
+                    }
+                    9 -> {
+                        autoLangCode = "pt"
+                    }
+                    10 -> {
+                        autoLangCode = "vi"
+                    }
+                    11 -> {
+                        autoLangCode = "id"
+                    }
+                    12 -> {
+                        autoLangCode = "fa"
+                    }
+                    13 -> {
+                        autoLangCode = "ar"
+                    }
+                    14 -> {
+                        autoLangCode = "mm"
+                    }
+                    15 -> {
+                        autoLangCode = "th"
+                    }
+                    16 -> {
+                        autoLangCode = "ru"
+                    }
+                    17 -> {
+                        autoLangCode = "it"
+                    }
+
+                }
+            }
+
+            override fun onNothingSelected(p0: AdapterView<*>?) {
+            }
+        }
+
+        targetSpinner.onItemSelectedListener = object: AdapterView.OnItemSelectedListener {
             //클릭했을때 언어코드 전달해줘야함
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                 when(position) {
@@ -105,23 +237,72 @@ class MainActivity : AppCompatActivity() {
                     override fun run() {
                         val detectLangs = DetectLangs(p0.toString())
                         autoLangCode = detectLangs.getlangCode()
-//                        outSpinner.setSelection() 선택된 spinner 변경하기
+                        when(autoLangCode){
+                            "ko" -> {
+                                handler.sendEmptyMessage(0)
+                            }
+                            "ja" -> {
+                                handler.sendEmptyMessage(1)
+                            }
+                            "zh-CN" -> {
+                                handler.sendEmptyMessage(2)
+                            }
+                            "zh-TW" -> {
+                                handler.sendEmptyMessage(3)
+                            }
+                            "hi" -> {
+                                handler.sendEmptyMessage(4)
+                            }
+                            "en" -> {
+                                handler.sendEmptyMessage(5)
+                            }
+                            "es" -> {
+                                handler.sendEmptyMessage(6)
+                            }
+                            "fr" -> {
+                                handler.sendEmptyMessage(7)
+                            }
+                            "de" -> {
+                                handler.sendEmptyMessage(8)
+                            }
+                            "pt" -> {
+                                handler.sendEmptyMessage(9)
+                            }
+                            "vi" -> {
+                                handler.sendEmptyMessage(10)
+                            }
+                            "id" -> {
+                                handler.sendEmptyMessage(11)
+                            }
+                            "fa" -> {
+                                handler.sendEmptyMessage(12)
+                            }
+                            "ar" -> {
+                                handler.sendEmptyMessage(13)
+                            }
+                            "mm" -> {
+                                handler.sendEmptyMessage(14)
+                            }
+                            "th" -> {
+                                handler.sendEmptyMessage(15)
+                            }
+                            "ru" -> {
+                                handler.sendEmptyMessage(16)
+                            }
+                            "it" -> {
+                                handler.sendEmptyMessage(17)
+                            }
+                        }
                     }
                 },3000)
             }
         }
 
         btn.setOnClickListener {
-            if(langCode == autoLangCode) {
-                val translate = TranslateTask(userEnterText.text.toString(), langCode)
+                val translate = TranslateTask(userEnterText.text.toString(), autoLangCode, langCode)
                 result.text = translate.execute().get()
-            }else{
-                Toast.makeText(this, "현재 감지된 언어는 $autoLangCode 이고, 선택된 언어는 $langCode 입니다", Toast.LENGTH_SHORT).show()
-                result.text = "선택된 언어를 확인해주세요"
-            }
         }
 
         userEnterText.addTextChangedListener(textWatcher)
-
     }
 }

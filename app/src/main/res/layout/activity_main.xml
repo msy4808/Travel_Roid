@@ -12,21 +12,31 @@
         android:layout_height="wrap_content"
         android:text="파파고 API 테스트"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.146" />
 
     <Spinner
         android:id="@+id/langTag"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/title"/>
+        android:layout_marginTop="30dp"
+        app:layout_constraintTop_toBottomOf="@id/title" />
+    <Spinner
+        android:id="@+id/langTag2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        app:layout_constraintTop_toBottomOf="@id/langTag" />
 
     <EditText
         android:id="@+id/textIn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@+id/langTag" />
+        android:layout_marginTop="30dp"
+        app:layout_constraintTop_toBottomOf="@+id/langTag2" />
 
     <TextView
         android:id="@+id/result"
