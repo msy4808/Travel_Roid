@@ -25,7 +25,9 @@ fun connect(apiURL: String): HttpURLConnection {
     }
 }
 
-class TranslateTask(translationText:String) : AsyncTask<String, Void, String> (){
+class TranslateTask(translationText:String, langCode: String, targetLangCode: String) : AsyncTask<String, Void, String> (){
+    var langCode = langCode
+    var targetLangCode = targetLangCode
     var translationText = translationText
     override fun doInBackground(vararg p0: String?): String {
         val apiURL = "https://openapi.naver.com/v1/papago/n2mt"
@@ -59,8 +61,8 @@ class TranslateTask(translationText:String) : AsyncTask<String, Void, String> ()
 
         fun post(apiUrl: String, requestHeaders: Map<String, String>, text: String): String {
             val con: HttpURLConnection = connect(apiUrl)
-            val postParams = "source=ko&target=en&text=$text"
-
+            val postParams = "source=$langCode&target=$targetLangCode&text=$text"
+            println("번역 코드 테스트 ; $postParams")
             try{
                 con.requestMethod = "POST"
 
