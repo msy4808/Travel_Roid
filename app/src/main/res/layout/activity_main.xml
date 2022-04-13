@@ -6,6 +6,8 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
+
+
     <TextView
         android:id="@+id/title"
         android:layout_width="wrap_content"
@@ -45,6 +47,10 @@
             android:text="번역"
             tools:layout_editor_absoluteX="161dp"
             tools:layout_editor_absoluteY="513dp" />
+
+
+
+
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
