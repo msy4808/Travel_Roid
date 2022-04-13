@@ -64,9 +64,10 @@ class MainActivity : AppCompatActivity() {
                     11 -> {
                         outSpinner.setSelection(11)
                     }
-                    12 -> {
-                        outSpinner.setSelection(12)
-                    }
+
+                    }   12 -> {
+                    outSpinner.setSelection(12)
+                }
                     13 -> {
                         outSpinner.setSelection(13)
                     }
@@ -81,7 +82,6 @@ class MainActivity : AppCompatActivity() {
                     }
                     17 -> {
                         outSpinner.setSelection(17)
-                    }
                 }
             }
         }
