@@ -27,7 +27,7 @@ class MainActivity : AppCompatActivity() {
 
         val handler = object:Handler(Looper.getMainLooper()){
             override fun handleMessage(msg: Message) {
-                when(msg.what){
+                when (msg.what) {
                     0 -> {
                         outSpinner.setSelection(0)
                     }
@@ -65,9 +65,9 @@ class MainActivity : AppCompatActivity() {
                         outSpinner.setSelection(11)
                     }
 
-                    }   12 -> {
-                    outSpinner.setSelection(12)
-                }
+                    12 -> {
+                        outSpinner.setSelection(12)
+                    }
                     13 -> {
                         outSpinner.setSelection(13)
                     }
@@ -82,6 +82,7 @@ class MainActivity : AppCompatActivity() {
                     }
                     17 -> {
                         outSpinner.setSelection(17)
+                    }
                 }
             }
         }
