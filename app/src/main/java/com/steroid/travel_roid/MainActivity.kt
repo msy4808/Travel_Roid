@@ -92,7 +92,7 @@ class MainActivity : AppCompatActivity() {
 
         //spinner 메뉴 어댑터 연결
         outSpinner.adapter = ArrayAdapter.createFromResource(this, R.array.langList, android.R.layout.simple_spinner_item)
-        targetSpinner.adapter = ArrayAdapter.createFromResource(this, R.array.langList, android.R.layout.simple_spinner_item)
+        targetSpinner.adapter = ArrayAdapter.createFromResource(this, R.array.target_langList, android.R.layout.simple_spinner_item)
 
         //spinner 리스너 설정
         outSpinner.onItemSelectedListener = object: AdapterView.OnItemSelectedListener {
@@ -168,54 +168,40 @@ class MainActivity : AppCompatActivity() {
                         langCode = "ko"
                     }
                     1 -> {
-                        langCode = "ja"
+                        langCode = "en"
                     }
                     2 -> {
-                        langCode = "zh-CN"
+                        langCode = "ja"
                     }
                     3 -> {
                         langCode = "zh-TW"
                     }
                     4 -> {
-                        langCode = "hi"
+                        langCode = "zh-CN"
                     }
                     5 -> {
-                        langCode = "en"
+
+                        langCode = "vi"
                     }
                     6 -> {
-                        langCode = "es"
+                        langCode = "id"
                     }
                     7 -> {
-                        langCode = "fr"
+                        langCode = "th"
                     }
                     8 -> {
                         langCode = "de"
                     }
                     9 -> {
-                        langCode = "pt"
+                        langCode = "es"
                     }
                     10 -> {
-                        langCode = "vi"
+                        langCode = "fr"
                     }
                     11 -> {
-                        langCode = "id"
-                    }
-                    12 -> {
-                        langCode = "fa"
-                    }
-                    13 -> {
-                        langCode = "ar"
-                    }
-                    14 -> {
-                        langCode = "mm"
-                    }
-                    15 -> {
-                        langCode = "th"
-                    }
-                    16 -> {
                         langCode = "ru"
                     }
-                    17 -> {
+                    12 -> {
                         langCode = "it"
                     }
 
