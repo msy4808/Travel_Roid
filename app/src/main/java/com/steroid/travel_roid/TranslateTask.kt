@@ -2,7 +2,6 @@ package com.steroid.travel_roid
 
 import android.os.AsyncTask
 import android.util.Log
-import android.widget.Toast
 import com.google.gson.JsonElement
 import com.google.gson.JsonParser
 import java.io.*
@@ -12,12 +11,25 @@ import java.net.MalformedURLException
 import java.net.URL
 import java.net.URLEncoder
 
-class TranslateTask(translationText:String) : AsyncTask<String, Void, String> (){
+val clientId = "Ge3xCYIlR7pE8p7yNiVe"
+val clientSercret = "cP885YoL58"
+
+fun connect(apiURL: String): HttpURLConnection {
+    return try {
+        val url = URL(apiURL)
+        (url.openConnection() as HttpURLConnection)
+    }catch (e: MalformedURLException){
+        throw RuntimeException("API URL 오류", e)
+    }catch (e: IOException) {
+        throw RuntimeException("연결 실패",e)
+    }
+}
+
+class TranslateTask(translationText:String, langCode: String, targetLangCode: String) : AsyncTask<String, Void, String> (){
+    var langCode = langCode
+    var targetLangCode = targetLangCode
     var translationText = translationText
     override fun doInBackground(vararg p0: String?): String {
-        val clientId = "Ge3xCYIlR7pE8p7yNiVe"
-        val clientSercret = "cP885YoL58"
-
         val apiURL = "https://openapi.naver.com/v1/papago/n2mt"
         var text: String = translationText
         text = try {
@@ -29,16 +41,7 @@ class TranslateTask(translationText:String) : AsyncTask<String, Void, String> ()
         requestHeaders["X-Naver-Client-Id"] = clientId
         requestHeaders["X-Naver-Client-Secret"] = clientSercret
 
-        fun connect(apiURL: String): HttpURLConnection {
-            return try {
-                val url = URL(apiURL)
-                (url.openConnection() as HttpURLConnection)
-            }catch (e: MalformedURLException){
-                throw RuntimeException("API URL 오류", e)
-            }catch (e: IOException) {
-                throw RuntimeException("연결 실패",e)
-            }
-        }
+
 
         fun readBody(body: InputStream): String {
             val streamReader = InputStreamReader(body);
@@ -58,8 +61,8 @@ class TranslateTask(translationText:String) : AsyncTask<String, Void, String> ()
 
         fun post(apiUrl: String, requestHeaders: Map<String, String>, text: String): String {
             val con: HttpURLConnection = connect(apiUrl)
-            val postParams = "source=ko&target=en&text=$text"
-
+            val postParams = "source=$langCode&target=$targetLangCode&text=$text"
+            println("번역 코드 테스트 ; $postParams")
             try{
                 con.requestMethod = "POST"
 
