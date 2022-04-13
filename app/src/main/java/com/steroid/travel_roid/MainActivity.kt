@@ -16,11 +16,11 @@ import java.util.*
 class MainActivity : AppCompatActivity() {
     var langCode = ""
     var autoLangCode = ""
+    var response_Text = ""
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         val userEnterText: EditText = findViewById(R.id.textIn)
-        val btn: Button = findViewById<Button>(R.id.btn)
         val result: TextView = findViewById(R.id.result)
         val outSpinner: Spinner = findViewById(R.id.langTag) //spinner 메뉴
         val targetSpinner: Spinner = findViewById(R.id.langTag2)
@@ -81,6 +81,9 @@ class MainActivity : AppCompatActivity() {
                     }
                     17 -> {
                         outSpinner.setSelection(17)
+                    }
+                    99 -> {
+                        result.text = response_Text
                     }
                 }
             }
@@ -292,14 +295,12 @@ class MainActivity : AppCompatActivity() {
                                 handler.sendEmptyMessage(17)
                             }
                         }
+                        val translate = TranslateTask(userEnterText.text.toString(), autoLangCode, langCode) //텍스트와 두가지의 언어코드를 파라미터로 보냄
+                        response_Text = translate.execute().get()
+                        handler.sendEmptyMessage(99)
                     }
-                },3000)
+                },1000)
             }
-        }
-
-        btn.setOnClickListener {
-                val translate = TranslateTask(userEnterText.text.toString(), autoLangCode, langCode) //텍스트와 두가지의 언어코드를 파라미터로 보냄
-                result.text = translate.execute().get()
         }
 
         userEnterText.addTextChangedListener(textWatcher) //editText에텍스트가 입력되면 동작하는 리스너를 연결

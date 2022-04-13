@@ -76,7 +76,6 @@ class DetectLangs(userText:String) {
 
         if(element.asJsonObject.get("errorMessage") != null){
             Log.d("언어감지 오류", "감지 발생 : ${element.asJsonObject.get("errorCode").toString()}")
-            data = "A: 오류"
         }else if (element.asJsonObject.get("langCode") != null){
             data = element.asJsonObject.get("langCode").asString
 
