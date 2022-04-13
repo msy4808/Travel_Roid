@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Travel_Roid</string>
+    <string name="kakao_app_key">d3bc84d744e74ec2f19755c8cc701ad5</string>
 </resources>
