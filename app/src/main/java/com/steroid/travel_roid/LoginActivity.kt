@@ -8,7 +8,6 @@ import android.util.Log
 import android.widget.ImageButton
 import android.widget.TextView
 import android.widget.Toast
-import com.kakao.sdk.auth.LoginClient
 import com.kakao.sdk.auth.model.OAuthToken
 import com.kakao.sdk.common.KakaoSdk
 import com.kakao.sdk.common.model.AuthErrorCause
@@ -87,13 +86,10 @@ class LoginActivity : AppCompatActivity() {
         val kakao_login_button = findViewById<ImageButton>(R.id.kakao_login_button) // 로그인 버튼
 
         kakao_login_button.setOnClickListener {
-            if(LoginClient.instance.isKakaoTalkLoginAvailable(this)){
-                LoginClient.instance.loginWithKakaoTalk(this, callback = callback)
-
-
-
+            if(UserApiClient.instance.isKakaoTalkLoginAvailable(this)){
+                UserApiClient.instance.loginWithKakaoTalk(this, callback = callback)
             }else{
-                LoginClient.instance.loginWithKakaoAccount(this, callback = callback)
+                UserApiClient.instance.loginWithKakaoAccount(this, callback = callback)
             }
         }
 

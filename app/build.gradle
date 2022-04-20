@@ -42,7 +42,7 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
     implementation 'com.google.code.gson:gson:2.8.6'
 
-    implementation "com.kakao.sdk:v2-user:2.0.1" //카카오 로그인
+    implementation "com.kakao.sdk:v2-user:2.9.0" // 카카오 로그인
 
     implementation 'com.google.android.gms:play-services-auth:19.0.0' //구글 로그인
 }

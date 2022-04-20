@@ -40,11 +40,10 @@
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
-                <action android:name="android.intent.category.DEFAULT" />
-                <action android:name="android.intent.category.BROWSABLE" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
 
-                <data
-                    android:host="oauth"
+                <data android:host="oauth"
                     android:scheme="kakaod3bc84d744e74ec2f19755c8cc701ad5" />
             </intent-filter>
         </activity>

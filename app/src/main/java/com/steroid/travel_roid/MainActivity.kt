@@ -12,6 +12,9 @@ import android.view.View
 import android.widget.*
 import androidx.core.widget.doOnTextChanged
 import java.util.*
+import android.content.pm.PackageManager
+
+import android.content.pm.PackageInfo
 
 class MainActivity : AppCompatActivity() {
     var langCode = ""
