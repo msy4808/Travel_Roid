@@ -1,4 +1,6 @@
 <resources>
     <string name="app_name">Travel_Roid</string>
     <string name="kakao_app_key">d3bc84d744e74ec2f19755c8cc701ad5</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

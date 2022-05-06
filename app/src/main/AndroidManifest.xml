@@ -4,11 +4,17 @@
     package="com.steroid.travel_roid"
     tools:ignore="ExtraText">
 
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.INTERNET" />
+<<<<<<< HEAD
     <!-- 정확한 위치 -->
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <!-- 대략적인 위치 -->
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+=======
+    <uses-feature android:name="android.hardware.camera" android:required="false" />
+>>>>>>> c9451fd771a83e4a1e31bf853d6e7a50ed48ee1c
 
     <application
         android:name=".GlobalApplication"
@@ -55,8 +61,7 @@
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
 
-                <data
-                    android:host="oauth"
+                <data android:host="oauth"
                     android:scheme="kakaod3bc84d744e74ec2f19755c8cc701ad5" />
             </intent-filter>
         </activity>
