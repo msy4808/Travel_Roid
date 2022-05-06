@@ -44,5 +44,7 @@ dependencies {
 
     implementation "com.kakao.sdk:v2-user:2.0.1" //카카오 로그인
 
-    implementation 'com.google.android.gms:play-services-auth:19.0.0' //구글 로그인
+    // google map api & location
+    implementation 'com.google.android.gms:play-services-maps:18.0.2'
+    implementation 'com.google.android.gms:play-services-location:19.0.1'
 }

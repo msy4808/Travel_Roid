@@ -1,8 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.steroid.travel_roid">
+    xmlns:tools="http://schemas.android.com/tools"
+    package="com.steroid.travel_roid"
+    tools:ignore="ExtraText">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <!-- 정확한 위치 -->
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <!-- 대략적인 위치 -->
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 
     <application
         android:name=".GlobalApplication"
@@ -13,11 +19,8 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Travel_Roid">
         <activity
-            android:name=".SecondActivity"
-            android:exported="false" />
-        <activity
-            android:name=".LoginActivity"
-            android:exported="true">
+            android:name=".LocationActivity"
+            android:exported="true" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -26,13 +29,22 @@
 
         </activity>
         <activity
-            android:name=".MainActivity"
+            android:name=".SecondActivity"
+            android:exported="false" />
+        <activity
+            android:name=".LoginActivity"
             android:exported="true">
 
 
         </activity>
+        <activity
+            android:name=".MainActivity"
+            android:exported="true">
 
-        <meta-data android:name="com.kakao.sdk.AppKey"
+        </activity>
+
+        <meta-data
+            android:name="com.kakao.sdk.AppKey"
             android:value="@string/kakao_app_key" />
 
         <activity
@@ -40,8 +52,8 @@
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
-                <action android:name="android.intent.category.DEFAULT" />
-                <action android:name="android.intent.category.BROWSABLE" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
 
                 <data
                     android:host="oauth"
