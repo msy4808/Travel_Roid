@@ -12,11 +12,13 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
+        android:background="@color/white"
         android:layout_weight="1"/>
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottomNavi"
         android:layout_width="match_parent"
         android:layout_height="56dp"
+        app:labelVisibilityMode="unlabeled"
         app:menu="@menu/bottom_navi"
         app:itemBackground="@color/white"
         app:itemIconTint="@color/color1"
