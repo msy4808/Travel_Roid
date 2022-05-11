@@ -5,10 +5,15 @@
     android:layout_height="match_parent"
     tools:context=".CameraFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="카메라탭" />
 
+    <SurfaceView
+        android:id="@+id/camera_View"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+    <ImageButton
+        android:id="@+id/camera_Btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal|bottom"
+        android:src="@drawable/ic_camera_btn"/>
 </FrameLayout>
