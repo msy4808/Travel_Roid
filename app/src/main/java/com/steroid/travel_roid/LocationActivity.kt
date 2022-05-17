@@ -94,10 +94,11 @@ class LocationActivity : AppCompatActivity() {
     // 시스템으로 부터 받은 위치정보를 화면에 갱신해주는 메소드
     fun onLocationChanged(location: Location) {
         mLastLocation = location
-        val address = geocoder.getFromLocation(mLastLocation.latitude,mLastLocation.longitude,1)
+        val address = geocoder.getFromLocation(mLastLocation.latitude,mLastLocation.longitude,10)
+
         text1.text = "위도 : " + mLastLocation.latitude // 갱신 된 위도
         text2.text = "경도 : " + mLastLocation.longitude // 갱신 된 경도
-        text3.text = "주소 : " + address.get(0).countryName+address.get(0).adminArea
+        text3.text = "주소 : " + address.get(0).countryName+","+address.get(0).adminArea
     }
 
 
