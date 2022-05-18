@@ -1,246 +1,208 @@
 package com.steroid.travel_roid
 
+
 import android.Manifest
+import android.app.Activity
 import android.content.Context
 import android.content.pm.PackageManager
-import android.graphics.ImageFormat
-import android.hardware.Sensor
-import android.hardware.SensorManager
 import android.hardware.camera2.*
-import android.media.ExifInterface
-import android.media.ImageReader
-import android.os.Build
+
 import android.os.Bundle
-import android.os.Handler
-import android.os.HandlerThread
-import android.util.DisplayMetrics
-import android.util.Log
-import android.util.SparseIntArray
+
 import android.view.*
+
+import androidx.fragment.app.Fragment
+
+import android.net.Uri
+import android.util.Log
+import android.view.animation.Animation
+import android.view.animation.AnimationUtils
 import android.widget.FrameLayout
 import android.widget.ImageButton
-import androidx.fragment.app.Fragment
-import android.widget.Toast
-import androidx.annotation.RequiresApi
+import android.widget.ImageView
+import androidx.camera.core.CameraSelector
+import androidx.camera.core.ImageCapture
+import androidx.camera.core.ImageCaptureException
+import androidx.camera.core.Preview
+import androidx.camera.lifecycle.ProcessCameraProvider
+import androidx.camera.view.PreviewView
 import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat.getSystemService
-import java.util.zip.Inflater
+import androidx.core.content.ContextCompat
+
+import java.io.File
+import java.text.SimpleDateFormat
+import java.util.*
+import java.util.concurrent.ExecutorService
+import java.util.concurrent.Executors
 
 class CameraFragment : Fragment() {
-    private lateinit var mSurfaceViewHolder: SurfaceHolder
-    private lateinit var mSurfaceView: SurfaceView
-    private lateinit var mImageReader: ImageReader
-    private lateinit var mCameraDevice: CameraDevice
-    private lateinit var mPreviewBuilder: CaptureRequest.Builder
-    private lateinit var mSession: CameraCaptureSession
 
-    private var mHandler: Handler? = null
+    private var imageCapture: ImageCapture? = null
 
-    private lateinit var mAccelerometer: Sensor
-    private lateinit var mMagnetometer: Sensor
-    private lateinit var mSensorManager: SensorManager
+    private lateinit var previewView:PreviewView
+    private lateinit var frameLayoutPreview: FrameLayout
+    private lateinit var imageViewPreview: ImageView
+    private lateinit var cameraBtn: ImageButton
 
-    private val deviceOrientation: DeviceOrientation by lazy { DeviceOrientation() }
-    private var mHeight: Int = 0
-    private var mWidth: Int = 0
-    var mCameraId = CAMERA_BACK
+    private lateinit var outputDirectory: File
+    private lateinit var cameraExecutor: ExecutorService
 
-    private lateinit var btn_convert:ImageButton
-    companion object {
-        const val CAMERA_BACK = "0"
-        const val CAMERA_FRONT = "1"
+    private lateinit var cameraAnimationListener: Animation.AnimationListener
 
-        private val ORIENTATIONS = SparseIntArray()
+    private var savedUri: Uri? = null
 
-        init {
-            ORIENTATIONS.append(ExifInterface.ORIENTATION_NORMAL, 0)
-            ORIENTATIONS.append(ExifInterface.ORIENTATION_ROTATE_90, 90)
-            ORIENTATIONS.append(ExifInterface.ORIENTATION_ROTATE_180, 180)
-            ORIENTATIONS.append(ExifInterface.ORIENTATION_ROTATE_270, 270)
+    object PermissionUtil {
+
+        fun checkPermission(context: Context, permissionList: List<String>): Boolean {
+            for (i: Int in permissionList.indices) {
+                if (ContextCompat.checkSelfPermission(
+                        context,
+                        permissionList[i]
+                    ) == PackageManager.PERMISSION_DENIED
+                ) {
+                    return false
+                }
+            }
+
+            return true
+
+        }
+
+        fun requestPermission(activity: Activity, permissionList: List<String>){
+            ActivityCompat.requestPermissions(activity, permissionList.toTypedArray(), 10)
+        }
+
+    }
+
+    private fun permissionCheck() {
+
+        var permissionList =
+            listOf(Manifest.permission.CAMERA, Manifest.permission.READ_EXTERNAL_STORAGE)
+
+        if (!PermissionUtil.checkPermission((activity as MainActivity).applicationContext, permissionList)) {
+            PermissionUtil.requestPermission((activity as MainActivity), permissionList)
+        } else {
+            openCamera()
         }
     }
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
     }
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         var view = inflater.inflate(R.layout.fragment_camera, container, false)
-        mSurfaceView = view.findViewById<SurfaceView>(R.id.camera_View)
-        btn_convert = view.findViewById(R.id.camera_Btn)
-        
-        // 화면 켜짐 유지
-        (activity as MainActivity).window.setFlags(
-            WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON,
-            WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON
-        )
-
-        initSensor()
-        initView()
-
+        previewView = view.findViewById(R.id.preview_View)
+        frameLayoutPreview = view.findViewById(R.id.frame_Preview)
+        imageViewPreview = view.findViewById(R.id.image_Preview)
+        cameraBtn = view.findViewById(R.id.camera_Btn)
+        permissionCheck()
+        openCamera()
+        cameraBtn.setOnClickListener {
+            savePhoto()
+        }
+        outputDirectory = getOutputDirectory()
+        cameraExecutor = Executors.newSingleThreadExecutor()
         return view
     }
 
-    private fun initSensor() {
-        mSensorManager =
-            (activity as MainActivity).getSystemService(Context.SENSOR_SERVICE) as SensorManager
-        mAccelerometer = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER)
-        mMagnetometer = mSensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD)
-    }
-
-    private fun initView() {
-        with(DisplayMetrics()) {
-            (activity as MainActivity).windowManager.defaultDisplay.getMetrics(this)
-            mHeight = heightPixels
-            mWidth = widthPixels
+    private fun getOutputDirectory(): File {
+        val mediaDir = (activity as MainActivity).externalMediaDirs.firstOrNull()?.let {
+            File(it, resources.getString(R.string.app_name)).apply { mkdirs() }
         }
-        mSurfaceViewHolder = mSurfaceView.holder
-        mSurfaceViewHolder.addCallback(object : SurfaceHolder.Callback {
-            override fun surfaceCreated(holder: SurfaceHolder) {
-                initCameraAndPreview()
-            }
-
-            override fun surfaceDestroyed(holder: SurfaceHolder) {
-                mCameraDevice.close()
-            }
-
-            override fun surfaceChanged(
-                holder: SurfaceHolder, format: Int,
-                width: Int, height: Int
-            ) {
-
-            }
-        })
-
-        btn_convert.setOnClickListener { switchCamera() }
-    }
-
-    private fun switchCamera() {
-        when (mCameraId) {
-            CAMERA_BACK -> {
-                mCameraId = CAMERA_FRONT
-                mCameraDevice.close()
-                openCamera()
-            }
-            else -> {
-                mCameraId = CAMERA_BACK
-                mCameraDevice.close()
-                openCamera()
-            }
-        }
-    }
-
-
-    fun initCameraAndPreview() {
-        val handlerThread = HandlerThread("CAMERA2")
-        handlerThread.start()
-        mHandler = Handler(handlerThread.looper)
-
-        openCamera()
+        val filesDir:File = File("")
+        return if (mediaDir != null && mediaDir.exists())
+            mediaDir else filesDir
     }
 
     private fun openCamera() {
-        try {
-            val mCameraManager =
-                (activity as MainActivity).getSystemService(Context.CAMERA_SERVICE) as CameraManager
-            val characteristics = mCameraManager.getCameraCharacteristics(mCameraId)
-            val map = characteristics.get(CameraCharacteristics.SCALER_STREAM_CONFIGURATION_MAP)
+        val cameraProviderFuture = ProcessCameraProvider.getInstance((activity as MainActivity).applicationContext)
 
-            val largestPreviewSize = map!!.getOutputSizes(ImageFormat.JPEG)[0]
-            setAspectRatioTextureView(largestPreviewSize.height, largestPreviewSize.width)
+        cameraProviderFuture.addListener({
+            val cameraProvider: ProcessCameraProvider = cameraProviderFuture.get()
 
-            mImageReader = ImageReader.newInstance(
-                largestPreviewSize.width,
-                largestPreviewSize.height,
-                ImageFormat.JPEG,
-                7
-            )
-            if (ActivityCompat.checkSelfPermission((activity as MainActivity).applicationContext, Manifest.permission.CAMERA)
-                != PackageManager.PERMISSION_GRANTED
-            ) return
+            val preview = Preview.Builder()
+                .build()
+                .also {
+                    it.setSurfaceProvider(previewView.surfaceProvider)
+                }
 
-            mCameraManager.openCamera(mCameraId, deviceStateCallback, mHandler)
-        } catch (e: CameraAccessException) {
-            Toast.makeText((activity as MainActivity).applicationContext,"카메라를 열지 못했습니다.",Toast.LENGTH_SHORT).show()
-        }
-    }
+            imageCapture = ImageCapture.Builder().build()
 
-    private val deviceStateCallback = object : CameraDevice.StateCallback() {
-        @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
-        override fun onOpened(camera: CameraDevice) {
-            mCameraDevice = camera
+            val cameraSelector = CameraSelector.DEFAULT_BACK_CAMERA
+
             try {
-                takePreview()
-            } catch (e: CameraAccessException) {
-                e.printStackTrace()
+
+                cameraProvider.unbindAll()
+                cameraProvider.bindToLifecycle(this, cameraSelector, preview, imageCapture)
+
+            } catch (e: Exception) {
+                Log.d("실패", "바인딩 실패 $e")
             }
-        }
+        }, ContextCompat.getMainExecutor((activity as MainActivity).applicationContext))
 
-        override fun onDisconnected(camera: CameraDevice) {
-            mCameraDevice.close()
-        }
-
-        override fun onError(camera: CameraDevice, error: Int) {
-            Toast.makeText((activity as MainActivity).applicationContext,"카메라를 열지 못했습니다.",Toast.LENGTH_SHORT).show()
-        }
     }
 
-    @Throws(CameraAccessException::class)
-    fun takePreview() {
-        mPreviewBuilder = mCameraDevice.createCaptureRequest(CameraDevice.TEMPLATE_PREVIEW)
-        mPreviewBuilder.addTarget(mSurfaceViewHolder.surface)
-        mCameraDevice.createCaptureSession(
-            listOf(mSurfaceViewHolder.surface, mImageReader.surface),
-            mSessionPreviewStateCallback,
-            mHandler
+    private fun savePhoto() {
+        imageCapture = imageCapture ?: return
+
+        val photoFile = File(
+            outputDirectory,
+            SimpleDateFormat("yy-mm-dd", Locale.US).format(System.currentTimeMillis()) + ".png"
         )
-    }
+        val outputOption = ImageCapture.OutputFileOptions.Builder(photoFile).build()
 
-    private val mSessionPreviewStateCallback = object : CameraCaptureSession.StateCallback() {
-        override fun onConfigured(session: CameraCaptureSession) {
-            mSession = session
-            try {
-                // Key-Value 구조로 설정
-                // 오토포커싱이 계속 동작
-                mPreviewBuilder.set(
-                    CaptureRequest.CONTROL_AF_MODE,
-                    CaptureRequest.CONTROL_AF_MODE_CONTINUOUS_PICTURE
-                )
-                //필요할 경우 플래시가 자동으로 켜짐
-                mPreviewBuilder.set(
-                    CaptureRequest.CONTROL_AE_MODE,
-                    CaptureRequest.CONTROL_AE_MODE_ON_AUTO_FLASH
-                )
-                mSession.setRepeatingRequest(mPreviewBuilder.build(), null, mHandler)
-            } catch (e: CameraAccessException) {
-                e.printStackTrace()
+        imageCapture?.takePicture(
+            outputOption,
+            ContextCompat.getMainExecutor((activity as MainActivity).applicationContext),
+            object : ImageCapture.OnImageSavedCallback {
+                override fun onImageSaved(outputFileResults: ImageCapture.OutputFileResults) {
+                    savedUri = Uri.fromFile(photoFile)
+                }
+
+                override fun onError(exception: ImageCaptureException) {
+                    exception.printStackTrace()
+                    onBackPressed()
+                }
+            })
+    }
+    private fun setCameraAnimationListener() {
+        cameraAnimationListener = object : Animation.AnimationListener {
+            override fun onAnimationStart(animation: Animation?) {
+            }
+
+            override fun onAnimationEnd(animation: Animation?) {
+                showCaptureImage()
+            }
+
+            override fun onAnimationRepeat(animation: Animation?) {
+
             }
 
         }
-
-        override fun onConfigureFailed(p0: CameraCaptureSession) {
-        }
     }
-    private fun setAspectRatioTextureView(ResolutionWidth: Int, ResolutionHeight: Int) {
-        if (ResolutionWidth > ResolutionHeight) {
-            val newWidth = mWidth
-            val newHeight = mWidth * ResolutionWidth / ResolutionHeight
-            updateTextureViewSize(newWidth, newHeight)
+    private fun hideCaptureImage() {
+        imageViewPreview.setImageURI(null)
+        frameLayoutPreview.visibility = View.GONE
 
+    }
+
+    private fun showCaptureImage(): Boolean {
+        if (frameLayoutPreview.visibility == View.GONE) {
+            frameLayoutPreview.visibility = View.VISIBLE
+            imageViewPreview.setImageURI(savedUri)
+            return false
+        }
+        return true
+    }
+    fun onBackPressed() {
+        if (showCaptureImage()) {
+            hideCaptureImage()
         } else {
-            val newWidth = mWidth
-            val newHeight = mWidth * ResolutionHeight / ResolutionWidth
-            updateTextureViewSize(newWidth, newHeight)
-        }
+            onBackPressed()
 
-    }
-    private fun updateTextureViewSize(viewWidth: Int, viewHeight: Int) {
-        Log.d("ViewSize", "TextureView Width : $viewWidth TextureView Height : $viewHeight")
-        mSurfaceView.layoutParams = FrameLayout.LayoutParams(viewWidth, viewHeight)
+        }
     }
 }

@@ -5,9 +5,8 @@
     android:layout_height="match_parent"
     tools:context=".CameraFragment">
 
-
-    <SurfaceView
-        android:id="@+id/camera_View"
+    <androidx.camera.view.PreviewView
+        android:id="@+id/preview_View"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
     <ImageButton
@@ -16,4 +15,22 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal|bottom"
         android:src="@drawable/ic_camera_btn"/>
+    <FrameLayout
+        android:id="@+id/frame_Shutter"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/color1"
+        android:visibility="gone"/>
+    <FrameLayout
+        android:id="@+id/frame_Preview"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone">
+
+        <ImageView
+            android:id="@+id/image_Preview"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/color1"/>
+    </FrameLayout>
 </FrameLayout>
