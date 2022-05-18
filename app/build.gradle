@@ -1,7 +1,7 @@
 plugins {
     id 'com.android.application'
     id 'kotlin-android'
-
+    id 'com.google.gms.google-services'
 }
 
 android {
@@ -31,7 +31,6 @@ android {
         jvmTarget = '1.8'
     }
 }
-
 dependencies {
     //하단 탭
     implementation 'com.google.android.material:material:1.4.0.'
@@ -65,4 +64,18 @@ dependencies {
     implementation 'com.google.android.gms:play-services-maps:18.0.2'
     implementation 'com.google.android.gms:play-services-location:19.0.1'
     implementation 'io.github.ParkSangGwon:tedpermission:2.3.0'
+
+    //Firebase API 관련(텍스트추출) 구버전이라 사용이 안된다는데...?
+    implementation platform('com.google.firebase:firebase-bom:30.0.1')
+    implementation 'com.google.firebase:firebase-analytics-ktx'
+    implementation 'com.google.firebase:firebase-auth-ktx'
+    implementation 'com.google.firebase:firebase-firestore-ktx'
+
+    //새로운 버전의 텍스트 API
+    implementation 'com.google.android.gms:play-services-mlkit-text-recognition:18.0.0'
+    implementation 'com.google.mlkit:text-recognition-korean:16.0.0-beta4'
+    implementation 'com.google.mlkit:text-recognition-japanese:16.0.0-beta4'
+    implementation 'com.google.mlkit:text-recognition-chinese:16.0.0-beta4'
+    implementation 'com.google.mlkit:text-recognition:16.0.0-beta4'
+    implementation 'com.google.mlkit:text-recognition-devanagari:16.0.0-beta4'
 }

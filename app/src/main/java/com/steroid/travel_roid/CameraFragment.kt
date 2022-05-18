@@ -20,6 +20,7 @@ import android.view.animation.AnimationUtils
 import android.widget.FrameLayout
 import android.widget.ImageButton
 import android.widget.ImageView
+import android.widget.Toast
 import androidx.camera.core.CameraSelector
 import androidx.camera.core.ImageCapture
 import androidx.camera.core.ImageCaptureException
@@ -28,18 +29,32 @@ import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.camera.view.PreviewView
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import com.google.mlkit.vision.common.InputImage
+import com.google.mlkit.vision.text.TextRecognition
+import com.google.mlkit.vision.text.latin.TextRecognizerOptions
 
 import java.io.File
 import java.text.SimpleDateFormat
 import java.util.*
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
+import androidx.annotation.NonNull
+
+import com.google.android.gms.tasks.OnFailureListener
+
+import com.google.android.gms.tasks.OnSuccessListener
+import com.google.mlkit.vision.text.Text
+import com.google.mlkit.vision.text.chinese.ChineseTextRecognizerOptions
+import com.google.mlkit.vision.text.devanagari.DevanagariTextRecognizerOptions
+import com.google.mlkit.vision.text.japanese.JapaneseTextRecognizerOptions
+import com.google.mlkit.vision.text.korean.KoreanTextRecognizerOptions
+
 
 class CameraFragment : Fragment() {
 
     private var imageCapture: ImageCapture? = null
 
-    private lateinit var previewView:PreviewView
+    private lateinit var previewView: PreviewView
     private lateinit var frameLayoutPreview: FrameLayout
     private lateinit var imageViewPreview: ImageView
     private lateinit var cameraBtn: ImageButton
@@ -50,6 +65,15 @@ class CameraFragment : Fragment() {
     private lateinit var cameraAnimationListener: Animation.AnimationListener
 
     private var savedUri: Uri? = null
+    var imageText = ""
+
+    //텍스트 추출관련 - 각 언어별 베타 지원
+    val recognizer = TextRecognition.getClient(TextRecognizerOptions.DEFAULT_OPTIONS)
+    val chineserecognizer = TextRecognition.getClient(ChineseTextRecognizerOptions.Builder().build())
+    val devanagerrecognizer = TextRecognition.getClient(DevanagariTextRecognizerOptions.Builder().build())
+    val japneserecognizer = TextRecognition.getClient(JapaneseTextRecognizerOptions.Builder().build())
+    val koreanrecognizer = TextRecognition.getClient(KoreanTextRecognizerOptions.Builder().build())
+    private lateinit var image: InputImage
 
     object PermissionUtil {
 
@@ -68,7 +92,7 @@ class CameraFragment : Fragment() {
 
         }
 
-        fun requestPermission(activity: Activity, permissionList: List<String>){
+        fun requestPermission(activity: Activity, permissionList: List<String>) {
             ActivityCompat.requestPermissions(activity, permissionList.toTypedArray(), 10)
         }
 
@@ -79,7 +103,11 @@ class CameraFragment : Fragment() {
         var permissionList =
             listOf(Manifest.permission.CAMERA, Manifest.permission.READ_EXTERNAL_STORAGE)
 
-        if (!PermissionUtil.checkPermission((activity as MainActivity).applicationContext, permissionList)) {
+        if (!PermissionUtil.checkPermission(
+                (activity as MainActivity).applicationContext,
+                permissionList
+            )
+        ) {
             PermissionUtil.requestPermission((activity as MainActivity), permissionList)
         } else {
             openCamera()
@@ -89,6 +117,7 @@ class CameraFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
     }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -112,13 +141,14 @@ class CameraFragment : Fragment() {
         val mediaDir = (activity as MainActivity).externalMediaDirs.firstOrNull()?.let {
             File(it, resources.getString(R.string.app_name)).apply { mkdirs() }
         }
-        val filesDir:File = File("")
+        val filesDir: File = File("")
         return if (mediaDir != null && mediaDir.exists())
             mediaDir else filesDir
     }
 
     private fun openCamera() {
-        val cameraProviderFuture = ProcessCameraProvider.getInstance((activity as MainActivity).applicationContext)
+        val cameraProviderFuture =
+            ProcessCameraProvider.getInstance((activity as MainActivity).applicationContext)
 
         cameraProviderFuture.addListener({
             val cameraProvider: ProcessCameraProvider = cameraProviderFuture.get()
@@ -161,6 +191,7 @@ class CameraFragment : Fragment() {
                 override fun onImageSaved(outputFileResults: ImageCapture.OutputFileResults) {
                     savedUri = Uri.fromFile(photoFile)
                     showCaptureImage()
+                    runTextRecognition()
                 }
 
                 override fun onError(exception: ImageCaptureException) {
@@ -169,21 +200,41 @@ class CameraFragment : Fragment() {
                 }
             })
     }
-    private fun setCameraAnimationListener() {
-        cameraAnimationListener = object : Animation.AnimationListener {
-            override fun onAnimationStart(animation: Animation?) {
+
+
+    private fun runTextRecognition() {
+        image = InputImage.fromFilePath((activity as MainActivity).applicationContext, savedUri!!)
+        koreanrecognizer.process(image)
+            .addOnSuccessListener(
+                OnSuccessListener<Text?> { texts ->
+                    processTextRecognitionResult(texts)
+                })
+            .addOnFailureListener(
+                OnFailureListener { e -> // Task failed with an exception
+                    e.printStackTrace()
+                })
+    }
+
+    private fun processTextRecognitionResult(texts: Text) {
+        val blocks: List<Text.TextBlock> = texts.getTextBlocks()
+        Log.d("텍스트", "${blocks}")
+        if (blocks.size == 0) {
+            Toast.makeText(context,"No text found",Toast.LENGTH_SHORT).show()
+            return
+        }
+        for (i in blocks.indices) {
+            val lines: List<Text.Line> = blocks[i].getLines()
+            for (j in lines.indices) {
+                val elements: List<Text.Element> = lines[j].getElements()
+                for(k in elements.indices) {
+                    imageText += elements.get(k).text
+                    Log.d("텍스트", "${elements.get(k).text}")
+                    Log.d("최종", imageText)
+                }
             }
-
-            override fun onAnimationEnd(animation: Animation?) {
-                showCaptureImage()
-            }
-
-            override fun onAnimationRepeat(animation: Animation?) {
-
-            }
-
         }
     }
+
     private fun hideCaptureImage() {
         imageViewPreview.setImageURI(null)
         frameLayoutPreview.visibility = View.GONE
@@ -198,6 +249,7 @@ class CameraFragment : Fragment() {
         }
         return true
     }
+
     fun onBackPressed() {
         if (showCaptureImage()) {
             hideCaptureImage()

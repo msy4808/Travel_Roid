@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "320265147775",
+    "project_id": "smartrip-409a0",
+    "storage_bucket": "smartrip-409a0.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:320265147775:android:ee798a2b463a502de4364a",
+        "android_client_info": {
+          "package_name": "com.steroid.travel_roid"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "320265147775-1s5nc93k1o25st29kng1buurri13q2h3.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.steroid.travel_roid",
+            "certificate_hash": "7c2880d846b4439f831454fc51f130aa1ae7da7c"
+          }
+        },
+        {
+          "client_id": "320265147775-7qp6qnqq3j0fvbq7911b8cjtaoathfdq.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCQKAlve1ieK6kbXkEdKczh9r1oR5NRir4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "320265147775-7qp6qnqq3j0fvbq7911b8cjtaoathfdq.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
