@@ -160,6 +160,7 @@ class CameraFragment : Fragment() {
             object : ImageCapture.OnImageSavedCallback {
                 override fun onImageSaved(outputFileResults: ImageCapture.OutputFileResults) {
                     savedUri = Uri.fromFile(photoFile)
+                    showCaptureImage()
                 }
 
                 override fun onError(exception: ImageCaptureException) {

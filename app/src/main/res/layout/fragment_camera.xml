@@ -13,6 +13,8 @@
         android:id="@+id/camera_Btn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:background="@null"
+        android:layout_marginBottom="10dp"
         android:layout_gravity="center_horizontal|bottom"
         android:src="@drawable/ic_camera_btn"/>
     <FrameLayout
