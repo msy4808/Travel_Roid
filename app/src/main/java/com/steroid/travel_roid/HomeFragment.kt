@@ -30,7 +30,9 @@ class HomeFragment : Fragment() {
         val result: TextView = view.findViewById(R.id.result)
         val outSpinner: Spinner = view.findViewById(R.id.langTag) //spinner 메뉴
         val targetSpinner: Spinner = view.findViewById(R.id.langTag2)
-
+        if(!(imageText == "")){
+            userEnterText.setText(imageText)
+        }
         val handler = object:Handler(Looper.getMainLooper()){ //감지된 언어코드로 Spinner를 변경해주기 위해 핸들러 사용
             override fun handleMessage(msg: Message) {
                 when (msg.what) {

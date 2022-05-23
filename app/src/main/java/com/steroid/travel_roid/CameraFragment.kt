@@ -49,6 +49,7 @@ import com.google.mlkit.vision.text.devanagari.DevanagariTextRecognizerOptions
 import com.google.mlkit.vision.text.japanese.JapaneseTextRecognizerOptions
 import com.google.mlkit.vision.text.korean.KoreanTextRecognizerOptions
 
+var imageText:String = ""
 
 class CameraFragment : Fragment() {
 
@@ -65,7 +66,6 @@ class CameraFragment : Fragment() {
     private lateinit var cameraAnimationListener: Animation.AnimationListener
 
     private var savedUri: Uri? = null
-    var imageText = ""
 
     //텍스트 추출관련 - 각 언어별 베타 지원
     val recognizer = TextRecognition.getClient(TextRecognizerOptions.DEFAULT_OPTIONS)
@@ -229,10 +229,12 @@ class CameraFragment : Fragment() {
                 for(k in elements.indices) {
                     imageText += elements.get(k).text
                     Log.d("텍스트", "${elements.get(k).text}")
-                    Log.d("최종", imageText)
                 }
             }
         }
+        Log.d("최종", imageText)
+
+        (activity as MainActivity).supportFragmentManager.beginTransaction().replace(R.id.home_ly, HomeFragment()).commit()
     }
 
     private fun hideCaptureImage() {
