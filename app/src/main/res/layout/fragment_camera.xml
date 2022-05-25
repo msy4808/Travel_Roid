@@ -17,6 +17,15 @@
         android:layout_marginBottom="10dp"
         android:layout_gravity="center_horizontal|bottom"
         android:src="@drawable/ic_camera_btn"/>
+    <ImageButton
+        android:id="@+id/flash_Btn"
+        android:background="@null"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="40dp"
+        android:layout_marginRight="40dp"
+        android:layout_gravity="right|bottom"
+        android:src="@drawable/ic_flash"/>
     <FrameLayout
         android:id="@+id/frame_Shutter"
         android:layout_width="match_parent"

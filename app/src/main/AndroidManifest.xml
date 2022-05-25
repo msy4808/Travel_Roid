@@ -18,7 +18,7 @@
     <application
         android:name=".GlobalApplication"
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@drawable/ic_app"
         android:label="Travel_Roid"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"

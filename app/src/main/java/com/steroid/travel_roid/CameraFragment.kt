@@ -15,16 +15,11 @@ import androidx.fragment.app.Fragment
 
 import android.net.Uri
 import android.util.Log
-import android.view.animation.Animation
-import android.view.animation.AnimationUtils
+
 import android.widget.FrameLayout
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.Toast
-import androidx.camera.core.CameraSelector
-import androidx.camera.core.ImageCapture
-import androidx.camera.core.ImageCaptureException
-import androidx.camera.core.Preview
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.camera.view.PreviewView
 import androidx.core.app.ActivityCompat
@@ -38,7 +33,8 @@ import java.text.SimpleDateFormat
 import java.util.*
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
-import androidx.annotation.NonNull
+import androidx.camera.core.*
+import androidx.camera.view.CameraController
 
 import com.google.android.gms.tasks.OnFailureListener
 
@@ -62,8 +58,9 @@ class CameraFragment : Fragment() {
 
     private lateinit var outputDirectory: File
     private lateinit var cameraExecutor: ExecutorService
-
-    private lateinit var cameraAnimationListener: Animation.AnimationListener
+    private lateinit var camera: Camera
+    private lateinit var cameraController:CameraControl
+    private lateinit var cameraInfo: CameraInfo
 
     private var savedUri: Uri? = null
 
@@ -122,16 +119,28 @@ class CameraFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        var view = inflater.inflate(R.layout.fragment_camera, container, false)
+        val view = inflater.inflate(R.layout.fragment_camera, container, false)
+        val flash_Btn: ImageButton = view.findViewById(R.id.flash_Btn)
         previewView = view.findViewById(R.id.preview_View)
         frameLayoutPreview = view.findViewById(R.id.frame_Preview)
         imageViewPreview = view.findViewById(R.id.image_Preview)
         cameraBtn = view.findViewById(R.id.camera_Btn)
         permissionCheck()
         openCamera()
+        flash_Btn.setOnClickListener {
+            when (cameraInfo.torchState.value) {
+                TorchState.ON -> {
+                    cameraController.enableTorch(false)
+                }
+                TorchState.OFF -> {
+                    cameraController.enableTorch(true)
+                }
+            }
+        }
         cameraBtn.setOnClickListener {
             savePhoto()
         }
+
         outputDirectory = getOutputDirectory()
         cameraExecutor = Executors.newSingleThreadExecutor()
         return view
@@ -164,9 +173,10 @@ class CameraFragment : Fragment() {
             val cameraSelector = CameraSelector.DEFAULT_BACK_CAMERA
 
             try {
-
                 cameraProvider.unbindAll()
-                cameraProvider.bindToLifecycle(this, cameraSelector, preview, imageCapture)
+                camera = cameraProvider.bindToLifecycle(this, cameraSelector, preview, imageCapture)
+                cameraController = camera.cameraControl
+                cameraInfo = camera.cameraInfo
 
             } catch (e: Exception) {
                 Log.d("실패", "바인딩 실패 $e")
