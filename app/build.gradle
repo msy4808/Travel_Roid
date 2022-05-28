@@ -78,4 +78,8 @@ dependencies {
     implementation 'com.google.mlkit:text-recognition-chinese:16.0.0-beta4'
     implementation 'com.google.mlkit:text-recognition:16.0.0-beta4'
     implementation 'com.google.mlkit:text-recognition-devanagari:16.0.0-beta4'
+
+    //기상청 API
+    implementation 'com.squareup.retrofit2:retrofit:2.8.0'
+    implementation 'com.squareup.retrofit2:converter-gson:2.8.0'
 }
