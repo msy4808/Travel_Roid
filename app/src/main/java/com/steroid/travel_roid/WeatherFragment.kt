@@ -71,10 +71,10 @@ class WeatherFragment : Fragment() {
     lateinit var tvTemp : TextView          // 온도
     lateinit var btnRefresh : Button        // 새로고침 버튼
 
-    var base_date = "20210510"  // 발표 일자
+    var base_date = "20220529"  // 발표 일자
     var base_time = "1400"      // 발표 시각
-    var nx = "0"               // 예보지점 X 좌표
-    var ny = "0"              // 예보지점 Y 좌표
+    var nx =  "11"           // 예보지점 X 좌표
+    var ny =  "54"           // 예보지점 Y 좌표
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
