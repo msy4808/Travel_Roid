@@ -13,10 +13,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.ImageButton
-import android.widget.TextView
-import android.widget.Toast
+import android.widget.*
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat.checkSelfPermission
 import androidx.core.content.PermissionChecker.checkSelfPermission
@@ -66,13 +63,49 @@ class WeatherFragment : Fragment() {
     lateinit var geocoder: Geocoder
 
     lateinit var tvRainRatio : TextView     // 강수 확률
+    lateinit var tvRainRatio05 : TextView
+    lateinit var tvRainRatio08 : TextView
+    lateinit var tvRainRatio11 : TextView
+    lateinit var tvRainRatio14 : TextView
+    lateinit var tvRainRatio17 : TextView
+    lateinit var tvRainRatio20 : TextView
+    lateinit var tvRainRatio23 : TextView
+
     lateinit var tvRainType : TextView      // 강수 형태
+    lateinit var tvRainType05 : TextView
+    lateinit var tvRainType08 : TextView
+    lateinit var tvRainType11 : TextView
+    lateinit var tvRainType14 : TextView
+    lateinit var tvRainType17 : TextView
+    lateinit var tvRainType20 : TextView
+    lateinit var tvRainType23 : TextView
+
     lateinit var tvHumidity : TextView      // 습도
     lateinit var tvSky : TextView           // 하늘 상태
     lateinit var tvTemp : TextView          // 온도
+    lateinit var tvTemp02 : TextView
+    lateinit var tvTemp05 : TextView
+    lateinit var tvTemp08 : TextView
+    lateinit var tvTemp11 : TextView
+    lateinit var tvTemp14 : TextView
+    lateinit var tvTemp17 : TextView
+    lateinit var tvTemp20 : TextView
+    lateinit var tvTemp23 : TextView
     lateinit var tvTempHi : TextView        //최고온도
     lateinit var tvTempLo : TextView        //최저온도
     lateinit var btnRefresh : Button        // 새로고침 버튼
+    lateinit var weather:ImageView          //날씨그림
+    lateinit var weather02:ImageView
+    lateinit var weather05:ImageView
+    lateinit var weather08:ImageView
+    lateinit var weather11:ImageView
+    lateinit var weather14:ImageView
+    lateinit var weather17:ImageView
+    lateinit var weather20:ImageView
+    lateinit var weather23:ImageView
+
+    lateinit var tempDress: TextView
+    lateinit var dress:TextView
 
     var base_date = "2022"  // 발표 일자
     var base_time = "1400"      // 발표 시각
@@ -95,14 +128,51 @@ class WeatherFragment : Fragment() {
         text1 = weatherview.findViewById(R.id.text1)
         text2 = weatherview.findViewById(R.id.text2)
         text3 = weatherview.findViewById(R.id.text3)
+        tempDress = weatherview.findViewById(R.id.tempDress)
+        dress = weatherview.findViewById(R.id.dress)
 
         tvRainRatio = weatherview.findViewById(R.id.tvRainRatio)
-        tvRainType = weatherview.findViewById(R.id.tvRainType)
+        tvRainRatio05 = weatherview.findViewById(R.id.tvRainRatio05)
+        tvRainRatio08 = weatherview.findViewById(R.id.tvRainRatio08)
+        tvRainRatio11 = weatherview.findViewById(R.id.tvRainRatio11)
+        tvRainRatio14 = weatherview.findViewById(R.id.tvRainRatio14)
+        tvRainRatio17 = weatherview.findViewById(R.id.tvRainRatio17)
+        tvRainRatio20 = weatherview.findViewById(R.id.tvRainRatio20)
+        tvRainRatio23 = weatherview.findViewById(R.id.tvRainRatio23)
+
         tvHumidity = weatherview.findViewById(R.id.tvHumidity)
+
+        tvRainType = weatherview.findViewById(R.id.tvRainType)
+        tvRainType05 = weatherview.findViewById(R.id.tvRainType05)
+        tvRainType08 = weatherview.findViewById(R.id.tvRainType08)
+        tvRainType11 = weatherview.findViewById(R.id.tvRainType11)
+        tvRainType14 = weatherview.findViewById(R.id.tvRainType14)
+        tvRainType17 = weatherview.findViewById(R.id.tvRainType17)
+        tvRainType20 = weatherview.findViewById(R.id.tvRainType20)
+        tvRainType23 = weatherview.findViewById(R.id.tvRainType23)
+
         tvSky = weatherview.findViewById(R.id.tvSky)
         tvTemp = weatherview.findViewById(R.id.tvTemp)
+        tvTemp02 = weatherview.findViewById(R.id.tvTemp02)
+        tvTemp05 = weatherview.findViewById(R.id.tvTemp05)
+        tvTemp08 = weatherview.findViewById(R.id.tvTemp08)
+        tvTemp11 = weatherview.findViewById(R.id.tvTemp11)
+        tvTemp14 = weatherview.findViewById(R.id.tvTemp14)
+        tvTemp17 = weatherview.findViewById(R.id.tvTemp17)
+        tvTemp20 = weatherview.findViewById(R.id.tvTemp20)
+        tvTemp23 = weatherview.findViewById(R.id.tvTemp23)
         tvTempHi = weatherview.findViewById(R.id.tvTempHi)
         tvTempLo = weatherview.findViewById(R.id.tvTempLo)
+        weather = weatherview.findViewById(R.id.weather)
+        weather02 = weatherview.findViewById(R.id.weather02)
+        weather05 = weatherview.findViewById(R.id.weather05)
+        weather08 = weatherview.findViewById(R.id.weather08)
+        weather11 = weatherview.findViewById(R.id.weather11)
+        weather14 = weatherview.findViewById(R.id.weather14)
+        weather17 = weatherview.findViewById(R.id.weather17)
+        weather20 = weatherview.findViewById(R.id.weather20)
+        weather23 = weatherview.findViewById(R.id.weather23)
+
 
 
         geocoder = Geocoder(this.requireContext())
@@ -202,6 +272,13 @@ class WeatherFragment : Fragment() {
     fun setWeather(rainRatio : String, rainType : String, humidity : String, sky : String, temp : String, tempHi:String, tempLo:String) {
         // 강수 확률
         tvRainRatio.text = rainRatio + "%"
+        tvRainRatio05.text = rainRatio + "%"
+        tvRainRatio08.text = rainRatio + "%"
+        tvRainRatio11.text = rainRatio + "%"
+        tvRainRatio14.text = rainRatio + "%"
+        tvRainRatio17.text = rainRatio + "%"
+        tvRainRatio20.text = rainRatio + "%"
+        tvRainRatio23.text = rainRatio + "%"
         // 강수 형태
         var result = ""
         when(rainType) {
@@ -214,8 +291,15 @@ class WeatherFragment : Fragment() {
             else -> "오류"
         }
         tvRainType.text = result
+        tvRainType05.text = result
+        tvRainType08.text = result
+        tvRainType11.text = result
+        tvRainType14.text = result
+        tvRainType17.text = result
+        tvRainType20.text = result
+        tvRainType23.text = result
         // 습도
-        tvHumidity.text = humidity + "%"
+        tvHumidity.text = humidity
         // 하능 상태
         result = ""
         when(sky) {
@@ -224,13 +308,97 @@ class WeatherFragment : Fragment() {
             "4" -> result = "흐림"
             else -> "오류"
         }
+        when(sky) {
+            "1" ->  weather.setImageResource(R.drawable.sun)
+            "3" ->  weather.setImageResource(R.drawable.cloud)
+            "4" ->  weather.setImageResource(R.drawable.cloud)
+            else -> "오류"
+        }
+        when(sky) {
+            "1" ->  weather02.setImageResource(R.drawable.sun)
+            "3" ->  weather02.setImageResource(R.drawable.cloud)
+            "4" ->  weather02.setImageResource(R.drawable.cloud)
+            else -> "오류"
+        }
+        when(sky) {
+            "1" ->  weather05.setImageResource(R.drawable.sun)
+            "3" ->  weather05.setImageResource(R.drawable.cloud)
+            "4" ->  weather05.setImageResource(R.drawable.cloud)
+            else -> "오류"
+        }
+        when(sky) {
+            "1" ->  weather08.setImageResource(R.drawable.sun)
+            "3" ->  weather08.setImageResource(R.drawable.cloud)
+            "4" ->  weather08.setImageResource(R.drawable.cloud)
+            else -> "오류"
+        }
+        when(sky) {
+            "1" ->  weather11.setImageResource(R.drawable.sun)
+            "3" ->  weather11.setImageResource(R.drawable.cloud)
+            "4" ->  weather11.setImageResource(R.drawable.cloud)
+            else -> "오류"
+        }
+        when(sky) {
+            "1" ->  weather14.setImageResource(R.drawable.sun)
+            "3" ->  weather14.setImageResource(R.drawable.cloud)
+            "4" ->  weather14.setImageResource(R.drawable.cloud)
+            else -> "오류"
+        }
+        when(sky) {
+            "1" ->  weather17.setImageResource(R.drawable.sun)
+            "3" ->  weather17.setImageResource(R.drawable.cloud)
+            "4" ->  weather17.setImageResource(R.drawable.cloud)
+            else -> "오류"
+        }
+        when(sky) {
+            "1" ->  weather20.setImageResource(R.drawable.sun)
+            "3" ->  weather20.setImageResource(R.drawable.cloud)
+            "4" ->  weather20.setImageResource(R.drawable.cloud)
+            else -> "오류"
+        }
+        when(sky) {
+            "1" ->  weather23.setImageResource(R.drawable.sun)
+            "3" ->  weather23.setImageResource(R.drawable.cloud)
+            "4" ->  weather23.setImageResource(R.drawable.cloud)
+            else -> "오류"
+        }
         tvSky.text = result
         // 온도
         tvTemp.text = temp + "°"
+        tvTemp02.text = temp + "°"
+        tvTemp05.text = temp + "°"
+        tvTemp08.text = temp + "°"
+        tvTemp11.text = temp + "°"
+        tvTemp14.text = temp + "°"
+        tvTemp17.text = temp + "°"
+        tvTemp20.text = temp + "°"
+        tvTemp23.text = temp + "°"
 
 
         tvTempHi.text = "최고 "+temp + "°"
         tvTempLo.text = "최저 "+temp + "°"
+
+         when(temp) {
+            in "5".."8" -> dress.text ="울 코트, 가죽 옷, 기모"
+            in "9".."11" -> dress.text ="트렌치 코트, 야상, 점퍼"
+            in "12".."16" -> dress.text ="자켓, 가디건, 청자켓"
+            in "17".."19" -> dress.text ="니트, 맨투맨, 후드, 긴바지"
+            in "20".."22" -> dress.text ="블라우스, 긴팔 티, 슬랙스"
+            in "23".."27" -> dress.text ="얇은 셔츠, 반바지, 면바지"
+            in "28".."50" -> dress.text ="민소매, 반바지, 린넨 옷"
+            else -> dress.text ="패딩, 누빔 옷, 목도리"
+        }
+        when(temp) {
+            in "5".."8" -> tempDress.text =" 5° ~ 8° "
+            in "9".."11" -> tempDress.text =" 9° ~ 11° "
+            in "12".."16" -> tempDress.text =" 12° ~ 16° "
+            in "17".."19" -> tempDress.text =" 17° ~ 19° "
+            in "20".."22" -> tempDress.text =" 20° ~ 22° "
+            in "23".."27" -> tempDress.text =" 23° ~ 27° "
+            in "28".."50" -> tempDress.text =" 28° ~ 35° "
+            else -> tempDress.text =" 5이하 "
+        }
+
     }
 
     // 시간 설정하기

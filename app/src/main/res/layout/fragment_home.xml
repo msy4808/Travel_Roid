@@ -17,6 +17,7 @@
 
             <TextView
                 android:id="@+id/title"
+                android:fontFamily="@font/notosans_medium"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
@@ -143,6 +144,7 @@
                     android:layout_marginRight="20dp"
                     android:src="@drawable/ic_md_copy"/>
                 <ImageButton
+                    android:id="@+id/share"
                     android:layout_width="25dp"
                     android:layout_height="25dp"
                     android:scaleType="fitCenter"

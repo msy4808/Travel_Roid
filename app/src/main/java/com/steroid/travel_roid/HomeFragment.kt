@@ -1,8 +1,6 @@
 package com.steroid.travel_roid
 
-import android.content.ClipData
-import android.content.ClipboardManager
-import android.content.Context
+import android.content.*
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -42,11 +40,12 @@ class HomeFragment : Fragment() {
         var tts: TextToSpeech? = null
         val ttsIn_Btn: ImageButton = view.findViewById(R.id.inText_TTS)
         val ttsResult_Btn: ImageButton = view.findViewById(R.id.resultText_TTS)
+        val share_Btn: ImageButton = view.findViewById(R.id.share)
         userEnterText = view.findViewById(R.id.textIn)
         result = view.findViewById(R.id.result)
         outSpinner= view.findViewById(R.id.langTag) //spinner 메뉴
         targetSpinner= view.findViewById(R.id.langTag2)
-        if(!(imageText == "")){
+        if(!(imageText == "")){ //사진에서 텍스트 추출한 내용이 있을경우 내용을 붙여줌
             userEnterText.setText(imageText)
             postText(userEnterText.text)
         }
@@ -138,6 +137,19 @@ class HomeFragment : Fragment() {
             val clip: ClipData = ClipData.newPlainText("번역데이터",result.text)
             manager.setPrimaryClip(clip)
             Toast.makeText(context,"클립보드에 복사되었습니다",Toast.LENGTH_SHORT).show()
+        }
+
+        share_Btn.setOnClickListener { //공유버튼 이벤트 리스너 생성
+            try {
+                val sendText = "번역내용 공유하기"
+                val sendIntent = Intent()
+                sendIntent.action = Intent.ACTION_SEND
+                sendIntent.putExtra(Intent.EXTRA_TEXT, sendText)
+                sendIntent.type = "text/plain"
+                startActivity(Intent.createChooser(sendIntent, "Share"))
+            } catch (ignored: ActivityNotFoundException) {
+                Toast.makeText((activity as MainActivity).applicationContext, "공유 에러", Toast.LENGTH_SHORT).show()
+            }
         }
 
         //spinner 메뉴 어댑터 연결
