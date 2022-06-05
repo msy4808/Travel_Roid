@@ -14,6 +14,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.ImageButton
 import android.widget.TextView
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
@@ -58,7 +59,7 @@ class WeatherFragment : Fragment() {
     internal lateinit var mLocationRequest: LocationRequest // 위치 정보 요청의 매개변수를 저장하는
     private val REQUEST_PERMISSION_LOCATION = 10
 
-    lateinit var button: Button
+    lateinit var imageButton: ImageButton
     lateinit var text1: TextView
     lateinit var text2: TextView
     lateinit var text3: TextView
@@ -69,12 +70,14 @@ class WeatherFragment : Fragment() {
     lateinit var tvHumidity : TextView      // 습도
     lateinit var tvSky : TextView           // 하늘 상태
     lateinit var tvTemp : TextView          // 온도
+    lateinit var tvTempHi : TextView        //최고온도
+    lateinit var tvTempLo : TextView        //최저온도
     lateinit var btnRefresh : Button        // 새로고침 버튼
 
-    var base_date = "20220529"  // 발표 일자
+    var base_date = "2022"  // 발표 일자
     var base_time = "1400"      // 발표 시각
-    var nx =  "11"           // 예보지점 X 좌표
-    var ny =  "54"           // 예보지점 Y 좌표
+    var nx =  "59"           // 예보지점 X 좌표
+    var ny =  "120"           // 예보지점 Y 좌표
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -88,7 +91,7 @@ class WeatherFragment : Fragment() {
     ): View? {
         var weatherview = inflater.inflate(R.layout.fragment_weather, container, false)
 
-        button = weatherview.findViewById(R.id.button)
+        imageButton = weatherview.findViewById(R.id.button)
         text1 = weatherview.findViewById(R.id.text1)
         text2 = weatherview.findViewById(R.id.text2)
         text3 = weatherview.findViewById(R.id.text3)
@@ -98,7 +101,9 @@ class WeatherFragment : Fragment() {
         tvHumidity = weatherview.findViewById(R.id.tvHumidity)
         tvSky = weatherview.findViewById(R.id.tvSky)
         tvTemp = weatherview.findViewById(R.id.tvTemp)
-        btnRefresh = weatherview.findViewById(R.id.btnRefresh)
+        tvTempHi = weatherview.findViewById(R.id.tvTempHi)
+        tvTempLo = weatherview.findViewById(R.id.tvTempLo)
+
 
         geocoder = Geocoder(this.requireContext())
 
@@ -108,10 +113,12 @@ class WeatherFragment : Fragment() {
 
         }
 
+        startLocationUpdates()
         // 버튼 이벤트를 통해 현재 위치 찾기
-        button.setOnClickListener {
+        imageButton.setOnClickListener {
             if (checkPermissionForLocation(this.requireContext())) {
                 startLocationUpdates()
+                setWeather(nx, ny)
 
             }
         }
@@ -119,9 +126,7 @@ class WeatherFragment : Fragment() {
         setWeather(nx, ny)
 
         // <새로고침> 버튼 누를 때 날씨 정보 다시 가져오기
-        btnRefresh.setOnClickListener {
-            setWeather(nx, ny)
-        }
+
 
 
 
@@ -163,6 +168,8 @@ class WeatherFragment : Fragment() {
                     var humidity = ""       // 습도
                     var sky = ""            // 하능 상태
                     var temp = ""           // 기온
+                    var tempHi = ""         //최고기온
+                    var tempLo = ""         //최저기온
                     for (i in 0..9) {
                         when(it[i].category) {
                             "POP" -> rainRatio = it[i].fcstValue    // 강수 기온
@@ -170,12 +177,14 @@ class WeatherFragment : Fragment() {
                             "REH" -> humidity = it[i].fcstValue     // 습도
                             "SKY" -> sky = it[i].fcstValue          // 하늘 상태
                             "TMP" -> temp = it[i].fcstValue         // 기온
+                            "TMX" -> tempHi = it[i].fcstValue       //최고기온
+                            "TMN" -> tempLo = it[i].fcstValue       //최저기온
                             else -> continue
                         }
 
                     }
                     // 날씨 정보 텍스트뷰에 보이게 하기
-                    setWeather(rainRatio, rainType, humidity, sky, temp)
+                    setWeather(rainRatio, rainType, humidity, sky, temp,tempHi,tempLo)
 
                     // 토스트 띄우기
                     Toast.makeText(this@WeatherFragment.requireContext(), it[0].fcstDate + ", " + it[0].fcstTime + "의 날씨 정보입니다.", Toast.LENGTH_SHORT).show()
@@ -190,7 +199,7 @@ class WeatherFragment : Fragment() {
     }
 
     // 텍스트 뷰에 날씨 정보 보여주기
-    fun setWeather(rainRatio : String, rainType : String, humidity : String, sky : String, temp : String) {
+    fun setWeather(rainRatio : String, rainType : String, humidity : String, sky : String, temp : String, tempHi:String, tempLo:String) {
         // 강수 확률
         tvRainRatio.text = rainRatio + "%"
         // 강수 형태
@@ -218,6 +227,10 @@ class WeatherFragment : Fragment() {
         tvSky.text = result
         // 온도
         tvTemp.text = temp + "°"
+
+
+        tvTempHi.text = "최고 "+temp + "°"
+        tvTempLo.text = "최저 "+temp + "°"
     }
 
     // 시간 설정하기
@@ -270,9 +283,10 @@ class WeatherFragment : Fragment() {
         mLastLocation = location
         val address = geocoder.getFromLocation(mLastLocation.latitude,mLastLocation.longitude,100)
 
-        text1.text = "위도 : " + mLastLocation.latitude // 갱신 된 위도
-        text2.text = "경도 : " + mLastLocation.longitude // 갱신 된 경도
-        text3.text = "주소 : " + address.get(0).countryName+" "+address.get(0).adminArea+" "+address.get(0).locality+" "+address.get(0).subLocality+" "+address.get(0).thoroughfare
+        //text1.text = "위도 : " + mLastLocation.latitude // 갱신 된 위도
+        //text2.text = "경도 : " + mLastLocation.longitude // 갱신 된 경도
+        text3.text =  address.get(0).locality
+                //" "+address.get(0).subLocality+" "+address.get(0).thoroughfare
 
     }
 

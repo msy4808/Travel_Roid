@@ -19,11 +19,10 @@
                 android:id="@+id/title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_centerHorizontal="true"
-                android:layout_centerVertical="true"
-                android:textColor="@color/black"
+                android:layout_centerInParent="true"
                 android:text="smartrip"
                 android:textAlignment="center"
+                android:textColor="@color/black"
                 android:textSize="24dp" />
 
             <ImageButton
