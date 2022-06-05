@@ -21,8 +21,9 @@
         app:labelVisibilityMode="unlabeled"
         app:menu="@menu/bottom_navi"
         app:itemBackground="@color/white"
-        app:itemIconTint="@color/color1"
-        app:itemTextColor="@color/color1">
+        app:itemIconTint="@drawable/nav_icon_color"
+        app:itemIconSize="36dp"
+        app:itemTextColor="@drawable/nav_icon_color">
 
     </com.google.android.material.bottomnavigation.BottomNavigationView>
 

@@ -64,7 +64,7 @@ class CameraFragment : Fragment() {
 
     private var savedUri: Uri? = null
 
-    //텍스트 추출관련 - 각 언어별 베타 지원
+    //텍스트 추출관련 - 각 언어별 베타 지원(현재 한국어 언어팩 설정)
     val recognizer = TextRecognition.getClient(TextRecognizerOptions.DEFAULT_OPTIONS)
     val chineserecognizer = TextRecognition.getClient(ChineseTextRecognizerOptions.Builder().build())
     val devanagerrecognizer = TextRecognition.getClient(DevanagariTextRecognizerOptions.Builder().build())
@@ -238,6 +238,7 @@ class CameraFragment : Fragment() {
                 val elements: List<Text.Element> = lines[j].getElements()
                 for(k in elements.indices) {
                     imageText += elements.get(k).text
+                    imageText += " "
                     Log.d("텍스트", "${elements.get(k).text}")
                 }
             }

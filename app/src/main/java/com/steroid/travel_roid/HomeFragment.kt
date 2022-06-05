@@ -45,7 +45,7 @@ class HomeFragment : Fragment() {
         result = view.findViewById(R.id.result)
         outSpinner= view.findViewById(R.id.langTag) //spinner 메뉴
         targetSpinner= view.findViewById(R.id.langTag2)
-        if(!(imageText == "")){
+        if(!(imageText == "")){ //사진에서 텍스트 추출한 내용이 있을경우 내용을 붙여줌
             userEnterText.setText(imageText)
             postText(userEnterText.text)
         }
@@ -139,7 +139,7 @@ class HomeFragment : Fragment() {
             Toast.makeText(context,"클립보드에 복사되었습니다",Toast.LENGTH_SHORT).show()
         }
 
-        share_Btn.setOnClickListener {
+        share_Btn.setOnClickListener { //공유버튼 이벤트 리스너 생성
             try {
                 val sendText = "번역내용 공유하기"
                 val sendIntent = Intent()

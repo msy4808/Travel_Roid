@@ -11,4 +11,9 @@ class IntroActivity : AppCompatActivity() {
         setContentView(R.layout.activity_intro)
         Handler().postDelayed({ startActivity(Intent(this, LoginActivity::class.java)) }, 2000L) //딜레이 후 화면전환
     }
+
+    override fun onPause() {
+        super.onPause()
+        finish() //액티비티가 일시정지(화면전환)이 되면 종료
+    }
 }
