@@ -30,7 +30,6 @@ class LoginActivity : AppCompatActivity() {
             }
         }
 
-
 //        val keyHash = Utility.getKeyHash(this)
 //        Log.d("Hash", keyHash)
 
@@ -74,6 +73,19 @@ class LoginActivity : AppCompatActivity() {
                 Toast.makeText(this, "로그인에 성공하였습니다.", Toast.LENGTH_SHORT).show()
                 val intent = Intent(this, MainActivity::class.java)
                 startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP))
+                //사용자 정보(이메일 등) 가져오는 코드
+                UserApiClient.instance.me { user, error ->
+                    if (error != null) {
+                        Log.e("kakaoTest", "사용자 정보 요청 실패", error)
+                    }
+                    else if (user != null) {
+                        Log.i("kakaoTest", "사용자 정보 요청 성공" +
+                                "\n회원번호: ${user.id}" +
+                                "\n이메일: ${user.kakaoAccount?.email}" +
+                                "\n닉네임: ${user.kakaoAccount?.profile?.nickname}" +
+                                "\n프로필사진: ${user.kakaoAccount?.profile?.thumbnailImageUrl}")
+                    }
+                }
                 finish()
             }
         }
