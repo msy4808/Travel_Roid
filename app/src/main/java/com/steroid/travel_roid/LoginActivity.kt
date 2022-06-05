@@ -15,7 +15,7 @@ import com.kakao.sdk.user.UserApiClient
 class LoginActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_login2)
+        setContentView(R.layout.activity_login)
 
         // 로그인 정보 확인
         UserApiClient.instance.accessTokenInfo { tokenInfo, error ->
