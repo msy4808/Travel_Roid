@@ -110,7 +110,7 @@ class WeatherFragment : Fragment() {
     var base_date = "2022"  // 발표 일자
     var base_time = "1400"      // 발표 시각
     var nx =  "59"           // 예보지점 X 좌표
-    var ny =  "120"           // 예보지점 Y 좌표
+    var ny =  "123"           // 예보지점 Y 좌표
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -375,7 +375,7 @@ class WeatherFragment : Fragment() {
         tvTemp23.text = temp + "°"
 
 
-        tvTempHi.text = "최고 "+temp + "°"
+        tvTempHi.text = "최고 "+temp + "°  "
         tvTempLo.text = "최저 "+temp + "°"
 
          when(temp) {
