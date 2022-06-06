@@ -13,15 +13,40 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.TextView
-import android.widget.Toast
+import android.widget.*
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat.checkSelfPermission
 import androidx.core.content.PermissionChecker.checkSelfPermission
 import com.google.android.gms.location.*
+import retrofit2.Call
+import retrofit2.Response
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
+import java.text.SimpleDateFormat
 
 import java.util.*
+
+
+// xml 파일 형식을 data class로 구현
+data class WEATHER (val response : RESPONSE)
+data class RESPONSE(val header : HEADER, val body : BODY)
+data class HEADER(val resultCode : Int, val resultMsg : String)
+data class BODY(val dataType : String, val items : ITEMS)
+data class ITEMS(val item : List<ITEM>)
+// category : 자료 구분 코드, fcstDate : 예측 날짜, fcstTime : 예측 시간, fcstValue : 예보 값
+data class ITEM(val category : String, val fcstDate : String, val fcstTime : String, val fcstValue : String)
+
+// retrofit을 사용하기 위한 빌더 생성
+private val retrofit = Retrofit.Builder()
+    .baseUrl("http://apis.data.go.kr/1360000/VilageFcstInfoService_2.0/")
+    .addConverterFactory(GsonConverterFactory.create())
+    .build()
+
+object ApiObject {
+    val retrofitService: WeatherInterface by lazy {
+        retrofit.create(WeatherInterface::class.java)
+    }
+}
 
 
 class WeatherFragment : Fragment() {
@@ -31,11 +56,61 @@ class WeatherFragment : Fragment() {
     internal lateinit var mLocationRequest: LocationRequest // 위치 정보 요청의 매개변수를 저장하는
     private val REQUEST_PERMISSION_LOCATION = 10
 
-    lateinit var button: Button
+    lateinit var imageButton: ImageButton
     lateinit var text1: TextView
     lateinit var text2: TextView
     lateinit var text3: TextView
     lateinit var geocoder: Geocoder
+
+    lateinit var tvRainRatio : TextView     // 강수 확률
+    lateinit var tvRainRatio05 : TextView
+    lateinit var tvRainRatio08 : TextView
+    lateinit var tvRainRatio11 : TextView
+    lateinit var tvRainRatio14 : TextView
+    lateinit var tvRainRatio17 : TextView
+    lateinit var tvRainRatio20 : TextView
+    lateinit var tvRainRatio23 : TextView
+
+    lateinit var tvRainType : TextView      // 강수 형태
+    lateinit var tvRainType05 : TextView
+    lateinit var tvRainType08 : TextView
+    lateinit var tvRainType11 : TextView
+    lateinit var tvRainType14 : TextView
+    lateinit var tvRainType17 : TextView
+    lateinit var tvRainType20 : TextView
+    lateinit var tvRainType23 : TextView
+
+    lateinit var tvHumidity : TextView      // 습도
+    lateinit var tvSky : TextView           // 하늘 상태
+    lateinit var tvTemp : TextView          // 온도
+    lateinit var tvTemp02 : TextView
+    lateinit var tvTemp05 : TextView
+    lateinit var tvTemp08 : TextView
+    lateinit var tvTemp11 : TextView
+    lateinit var tvTemp14 : TextView
+    lateinit var tvTemp17 : TextView
+    lateinit var tvTemp20 : TextView
+    lateinit var tvTemp23 : TextView
+    lateinit var tvTempHi : TextView        //최고온도
+    lateinit var tvTempLo : TextView        //최저온도
+    lateinit var btnRefresh : Button        // 새로고침 버튼
+    lateinit var weather:ImageView          //날씨그림
+    lateinit var weather02:ImageView
+    lateinit var weather05:ImageView
+    lateinit var weather08:ImageView
+    lateinit var weather11:ImageView
+    lateinit var weather14:ImageView
+    lateinit var weather17:ImageView
+    lateinit var weather20:ImageView
+    lateinit var weather23:ImageView
+
+    lateinit var tempDress: TextView
+    lateinit var dress:TextView
+
+    var base_date = "2022"  // 발표 일자
+    var base_time = "1400"      // 발표 시각
+    var nx =  "59"           // 예보지점 X 좌표
+    var ny =  "123"           // 예보지점 Y 좌표
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -49,10 +124,56 @@ class WeatherFragment : Fragment() {
     ): View? {
         var weatherview = inflater.inflate(R.layout.fragment_weather, container, false)
 
-        button = weatherview.findViewById(R.id.button)
+        imageButton = weatherview.findViewById(R.id.button)
         text1 = weatherview.findViewById(R.id.text1)
         text2 = weatherview.findViewById(R.id.text2)
         text3 = weatherview.findViewById(R.id.text3)
+        tempDress = weatherview.findViewById(R.id.tempDress)
+        dress = weatherview.findViewById(R.id.dress)
+
+        tvRainRatio = weatherview.findViewById(R.id.tvRainRatio)
+        tvRainRatio05 = weatherview.findViewById(R.id.tvRainRatio05)
+        tvRainRatio08 = weatherview.findViewById(R.id.tvRainRatio08)
+        tvRainRatio11 = weatherview.findViewById(R.id.tvRainRatio11)
+        tvRainRatio14 = weatherview.findViewById(R.id.tvRainRatio14)
+        tvRainRatio17 = weatherview.findViewById(R.id.tvRainRatio17)
+        tvRainRatio20 = weatherview.findViewById(R.id.tvRainRatio20)
+        tvRainRatio23 = weatherview.findViewById(R.id.tvRainRatio23)
+
+        tvHumidity = weatherview.findViewById(R.id.tvHumidity)
+
+        tvRainType = weatherview.findViewById(R.id.tvRainType)
+        tvRainType05 = weatherview.findViewById(R.id.tvRainType05)
+        tvRainType08 = weatherview.findViewById(R.id.tvRainType08)
+        tvRainType11 = weatherview.findViewById(R.id.tvRainType11)
+        tvRainType14 = weatherview.findViewById(R.id.tvRainType14)
+        tvRainType17 = weatherview.findViewById(R.id.tvRainType17)
+        tvRainType20 = weatherview.findViewById(R.id.tvRainType20)
+        tvRainType23 = weatherview.findViewById(R.id.tvRainType23)
+
+        tvSky = weatherview.findViewById(R.id.tvSky)
+        tvTemp = weatherview.findViewById(R.id.tvTemp)
+        tvTemp02 = weatherview.findViewById(R.id.tvTemp02)
+        tvTemp05 = weatherview.findViewById(R.id.tvTemp05)
+        tvTemp08 = weatherview.findViewById(R.id.tvTemp08)
+        tvTemp11 = weatherview.findViewById(R.id.tvTemp11)
+        tvTemp14 = weatherview.findViewById(R.id.tvTemp14)
+        tvTemp17 = weatherview.findViewById(R.id.tvTemp17)
+        tvTemp20 = weatherview.findViewById(R.id.tvTemp20)
+        tvTemp23 = weatherview.findViewById(R.id.tvTemp23)
+        tvTempHi = weatherview.findViewById(R.id.tvTempHi)
+        tvTempLo = weatherview.findViewById(R.id.tvTempLo)
+        weather = weatherview.findViewById(R.id.weather)
+        weather02 = weatherview.findViewById(R.id.weather02)
+        weather05 = weatherview.findViewById(R.id.weather05)
+        weather08 = weatherview.findViewById(R.id.weather08)
+        weather11 = weatherview.findViewById(R.id.weather11)
+        weather14 = weatherview.findViewById(R.id.weather14)
+        weather17 = weatherview.findViewById(R.id.weather17)
+        weather20 = weatherview.findViewById(R.id.weather20)
+        weather23 = weatherview.findViewById(R.id.weather23)
+
+
 
         geocoder = Geocoder(this.requireContext())
 
@@ -62,19 +183,240 @@ class WeatherFragment : Fragment() {
 
         }
 
+        startLocationUpdates()
         // 버튼 이벤트를 통해 현재 위치 찾기
-        button.setOnClickListener {
+        imageButton.setOnClickListener {
             if (checkPermissionForLocation(this.requireContext())) {
                 startLocationUpdates()
+                setWeather(nx, ny)
 
             }
         }
+        // nx, ny지점의 날씨 가져와서 설정하기
+        setWeather(nx, ny)
+
+        // <새로고침> 버튼 누를 때 날씨 정보 다시 가져오기
+
 
 
 
         return weatherview
 
 
+    }
+
+    // 날씨 가져와서 설정하기
+    fun setWeather(nx : String, ny : String) {
+        // 준비 단계 : base_date(발표 일자), base_time(발표 시각)
+        // 현재 날짜, 시간 정보 가져오기
+        val cal = Calendar.getInstance()
+        base_date = SimpleDateFormat("yyyyMMdd", Locale.getDefault()).format(cal.time) // 현재 날짜
+        val time = SimpleDateFormat("HH", Locale.getDefault()).format(cal.time) // 현재 시간
+        // API 가져오기 적당하게 변환
+        base_time = getTime(time)
+        // 동네예보  API는 3시간마다 현재시간+4시간 뒤의 날씨 예보를 알려주기 때문에
+        // 현재 시각이 00시가 넘었다면 어제 예보한 데이터를 가져와야함
+        if (base_time >= "2000") {
+            cal.add(Calendar.DATE, -1).toString()
+            base_date = SimpleDateFormat("yyyyMMdd", Locale.getDefault()).format(cal.time)
+        }
+
+        // 날씨 정보 가져오기
+        // (응답 자료 형식-"JSON", 한 페이지 결과 수 = 10, 페이지 번호 = 1, 발표 날싸, 발표 시각, 예보지점 좌표)
+        val call = ApiObject.retrofitService.GetWeather("JSON", 10, 1, base_date, base_time, nx, ny)
+
+        // 비동기적으로 실행하기
+        call.enqueue(object : retrofit2.Callback<WEATHER> {
+            // 응답 성공 시
+            override fun onResponse(call: Call<WEATHER>, response: Response<WEATHER>) {
+                if (response.isSuccessful) {
+                    // 날씨 정보 가져오기
+                    var it: List<ITEM> = response.body()!!.response.body.items.item
+
+                    var rainRatio = ""      // 강수 확률
+                    var rainType = ""       // 강수 형태
+                    var humidity = ""       // 습도
+                    var sky = ""            // 하능 상태
+                    var temp = ""           // 기온
+                    var tempHi = ""         //최고기온
+                    var tempLo = ""         //최저기온
+                    for (i in 0..9) {
+                        when(it[i].category) {
+                            "POP" -> rainRatio = it[i].fcstValue    // 강수 기온
+                            "PTY" -> rainType = it[i].fcstValue     // 강수 형태
+                            "REH" -> humidity = it[i].fcstValue     // 습도
+                            "SKY" -> sky = it[i].fcstValue          // 하늘 상태
+                            "TMP" -> temp = it[i].fcstValue         // 기온
+                            "TMX" -> tempHi = it[i].fcstValue       //최고기온
+                            "TMN" -> tempLo = it[i].fcstValue       //최저기온
+                            else -> continue
+                        }
+
+                    }
+                    // 날씨 정보 텍스트뷰에 보이게 하기
+                    setWeather(rainRatio, rainType, humidity, sky, temp,tempHi,tempLo)
+
+                    // 토스트 띄우기
+                    Toast.makeText(this@WeatherFragment.requireContext(), it[0].fcstDate + ", " + it[0].fcstTime + "의 날씨 정보입니다.", Toast.LENGTH_SHORT).show()
+                }
+            }
+
+            // 응답 실패 시
+            override fun onFailure(call: Call<WEATHER>, t: Throwable) {
+                Log.d("api fail", t.message.toString())
+            }
+        })
+    }
+
+    // 텍스트 뷰에 날씨 정보 보여주기
+    fun setWeather(rainRatio : String, rainType : String, humidity : String, sky : String, temp : String, tempHi:String, tempLo:String) {
+        // 강수 확률
+        tvRainRatio.text = rainRatio + "%"
+        tvRainRatio05.text = rainRatio + "%"
+        tvRainRatio08.text = rainRatio + "%"
+        tvRainRatio11.text = rainRatio + "%"
+        tvRainRatio14.text = rainRatio + "%"
+        tvRainRatio17.text = rainRatio + "%"
+        tvRainRatio20.text = rainRatio + "%"
+        tvRainRatio23.text = rainRatio + "%"
+        // 강수 형태
+        var result = ""
+        when(rainType) {
+            "0" -> result = "없음"
+            "1" -> result = "비"
+            "2" -> result = "비/눈"
+            "3" -> result = "눈"
+            "4" -> result = "소나기"
+
+            else -> "오류"
+        }
+        tvRainType.text = result
+        tvRainType05.text = result
+        tvRainType08.text = result
+        tvRainType11.text = result
+        tvRainType14.text = result
+        tvRainType17.text = result
+        tvRainType20.text = result
+        tvRainType23.text = result
+        // 습도
+        tvHumidity.text = humidity
+        // 하능 상태
+        result = ""
+        when(sky) {
+            "1" -> result = "맑음"
+            "3" -> result = "구름 많음"
+            "4" -> result = "흐림"
+            else -> "오류"
+        }
+        when(sky) {
+            "1" ->  weather.setImageResource(R.drawable.sun)
+            "3" ->  weather.setImageResource(R.drawable.cloud)
+            "4" ->  weather.setImageResource(R.drawable.cloud)
+            else -> "오류"
+        }
+        when(sky) {
+            "1" ->  weather02.setImageResource(R.drawable.sun)
+            "3" ->  weather02.setImageResource(R.drawable.cloud)
+            "4" ->  weather02.setImageResource(R.drawable.cloud)
+            else -> "오류"
+        }
+        when(sky) {
+            "1" ->  weather05.setImageResource(R.drawable.sun)
+            "3" ->  weather05.setImageResource(R.drawable.cloud)
+            "4" ->  weather05.setImageResource(R.drawable.cloud)
+            else -> "오류"
+        }
+        when(sky) {
+            "1" ->  weather08.setImageResource(R.drawable.sun)
+            "3" ->  weather08.setImageResource(R.drawable.cloud)
+            "4" ->  weather08.setImageResource(R.drawable.cloud)
+            else -> "오류"
+        }
+        when(sky) {
+            "1" ->  weather11.setImageResource(R.drawable.sun)
+            "3" ->  weather11.setImageResource(R.drawable.cloud)
+            "4" ->  weather11.setImageResource(R.drawable.cloud)
+            else -> "오류"
+        }
+        when(sky) {
+            "1" ->  weather14.setImageResource(R.drawable.sun)
+            "3" ->  weather14.setImageResource(R.drawable.cloud)
+            "4" ->  weather14.setImageResource(R.drawable.cloud)
+            else -> "오류"
+        }
+        when(sky) {
+            "1" ->  weather17.setImageResource(R.drawable.sun)
+            "3" ->  weather17.setImageResource(R.drawable.cloud)
+            "4" ->  weather17.setImageResource(R.drawable.cloud)
+            else -> "오류"
+        }
+        when(sky) {
+            "1" ->  weather20.setImageResource(R.drawable.sun)
+            "3" ->  weather20.setImageResource(R.drawable.cloud)
+            "4" ->  weather20.setImageResource(R.drawable.cloud)
+            else -> "오류"
+        }
+        when(sky) {
+            "1" ->  weather23.setImageResource(R.drawable.sun)
+            "3" ->  weather23.setImageResource(R.drawable.cloud)
+            "4" ->  weather23.setImageResource(R.drawable.cloud)
+            else -> "오류"
+        }
+        tvSky.text = result
+        // 온도
+        tvTemp.text = temp + "°"
+        tvTemp02.text = temp + "°"
+        tvTemp05.text = temp + "°"
+        tvTemp08.text = temp + "°"
+        tvTemp11.text = temp + "°"
+        tvTemp14.text = temp + "°"
+        tvTemp17.text = temp + "°"
+        tvTemp20.text = temp + "°"
+        tvTemp23.text = temp + "°"
+
+
+        tvTempHi.text = "최고 "+temp + "°  "
+        tvTempLo.text = "최저 "+temp + "°"
+
+         when(temp) {
+            in "5".."8" -> dress.text ="울 코트, 가죽 옷, 기모"
+            in "9".."11" -> dress.text ="트렌치 코트, 야상, 점퍼"
+            in "12".."16" -> dress.text ="자켓, 가디건, 청자켓"
+            in "17".."19" -> dress.text ="니트, 맨투맨, 후드, 긴바지"
+            in "20".."22" -> dress.text ="블라우스, 긴팔 티, 슬랙스"
+            in "23".."27" -> dress.text ="얇은 셔츠, 반바지, 면바지"
+            in "28".."50" -> dress.text ="민소매, 반바지, 린넨 옷"
+            else -> dress.text ="패딩, 누빔 옷, 목도리"
+        }
+        when(temp) {
+            in "5".."8" -> tempDress.text =" 5° ~ 8° "
+            in "9".."11" -> tempDress.text =" 9° ~ 11° "
+            in "12".."16" -> tempDress.text =" 12° ~ 16° "
+            in "17".."19" -> tempDress.text =" 17° ~ 19° "
+            in "20".."22" -> tempDress.text =" 20° ~ 22° "
+            in "23".."27" -> tempDress.text =" 23° ~ 27° "
+            in "28".."50" -> tempDress.text =" 28° ~ 35° "
+            else -> tempDress.text =" 5이하 "
+        }
+
+    }
+
+    // 시간 설정하기
+    // 동네 예보 API는 3시간마다 현재시각+4시간 뒤의 날씨 예보를 보여줌
+    // 따라서 현재 시간대의 날씨를 알기 위해서는 아래와 같은 과정이 필요함. 자세한 내용은 함께 제공된 파일 확인
+    fun getTime(time : String) : String {
+        var result = ""
+        when(time) {
+            in "00".."02" -> result = "2000"    // 00~02
+            in "03".."05" -> result = "2300"    // 03~05
+            in "06".."08" -> result = "0200"    // 06~08
+            in "09".."11" -> result = "0500"    // 09~11
+            in "12".."14" -> result = "0800"    // 12~14
+            in "15".."17" -> result = "1100"    // 15~17
+            in "18".."20" -> result = "1400"    // 18~20
+            else -> result = "1700"             // 21~23
+        }
+        return result
     }
 
     private fun startLocationUpdates() {
@@ -109,9 +451,10 @@ class WeatherFragment : Fragment() {
         mLastLocation = location
         val address = geocoder.getFromLocation(mLastLocation.latitude,mLastLocation.longitude,100)
 
-        text1.text = "위도 : " + mLastLocation.latitude // 갱신 된 위도
-        text2.text = "경도 : " + mLastLocation.longitude // 갱신 된 경도
-        text3.text = "주소 : " + address.get(0).countryName+" "+address.get(0).adminArea+" "+address.get(0).locality+" "+address.get(0).subLocality+" "+address.get(0).thoroughfare
+        //text1.text = "위도 : " + mLastLocation.latitude // 갱신 된 위도
+        //text2.text = "경도 : " + mLastLocation.longitude // 갱신 된 경도
+        text3.text =  address.get(0).locality
+                //" "+address.get(0).subLocality+" "+address.get(0).thoroughfare
 
     }
 
