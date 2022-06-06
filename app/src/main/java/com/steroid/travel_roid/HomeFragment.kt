@@ -13,8 +13,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
-import androidx.core.view.get
 import java.util.*
+
 
 class HomeFragment : Fragment() {
     var langCode = ""
@@ -41,6 +41,7 @@ class HomeFragment : Fragment() {
         val ttsIn_Btn: ImageButton = view.findViewById(R.id.inText_TTS)
         val ttsResult_Btn: ImageButton = view.findViewById(R.id.resultText_TTS)
         val share_Btn: ImageButton = view.findViewById(R.id.share)
+        val user_Btn: ImageView = view.findViewById(R.id.userMenu)
         userEnterText = view.findViewById(R.id.textIn)
         result = view.findViewById(R.id.result)
         outSpinner= view.findViewById(R.id.langTag) //spinner 메뉴
@@ -112,6 +113,10 @@ class HomeFragment : Fragment() {
                     }
                 }
             }
+        }
+        user_Btn.setOnClickListener {
+            val intent:Intent = Intent((activity as MainActivity).applicationContext, MypageActivity::class.java)
+            startActivity(intent)
         }
 
         tts = TextToSpeech(context) {
