@@ -102,8 +102,13 @@ class WeatherFragment : Fragment() {
         mLastLocation = location
         val address = geocoder.getFromLocation(mLastLocation.latitude,mLastLocation.longitude,100)
 
-        //text1.text = "위도 : " + mLastLocation.latitude // 갱신 된 위도
-        //text2.text = "경도 : " + mLastLocation.longitude // 갱신 된 경도
+         //text1.text = "위도 : " + mLastLocation.latitude // 갱신 된 위도
+         //text2.text = "경도 : " + mLastLocation.longitude // 갱신 된 경도
+
+
+
+
+
         text3.text =  address.get(0).locality
         //" "+address.get(0).subLocality+" "+address.get(0).thoroughfare
 
@@ -151,6 +156,7 @@ class WeatherFragment : Fragment() {
     }
 
     companion object{
+
 
         var BaseUrl = "https://api.openweathermap.org/"
         var AppId = "3e167cb3d121a8385cf010efb97d336f"
@@ -206,6 +212,7 @@ class WeatherFragment : Fragment() {
             priority = LocationRequest.PRIORITY_HIGH_ACCURACY
 
         }
+
 
         //Create Retrofit Builder
         val retrofit = Retrofit.Builder()
@@ -280,9 +287,9 @@ class WeatherFragment : Fragment() {
                     }
 
                     when(sky) {
-                        "1" ->  weather.setImageResource(R.drawable.sun)
+                        "Clear" ->  weather.setImageResource(R.drawable.sun)
                         "Clouds" ->  weather.setImageResource(R.drawable.cloud)
-                        "4" ->  weather.setImageResource(R.drawable.cloud)
+
                         else -> weather.setImageResource(R.drawable.cloud)
                     }
 
