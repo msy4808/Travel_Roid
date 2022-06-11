@@ -6,6 +6,7 @@
     tools:context=".WeatherFragment"
     android:background="@drawable/background"
     android:orientation="vertical">
+    
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="50dp">
@@ -25,17 +26,7 @@
     </RelativeLayout>
 
 
-    <ImageButton
-        android:id="@+id/button"
 
-        android:background="@drawable/update2"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:layout_gravity="right"
-        android:layout_marginRight="25dp"
-        android:layout_marginTop="10dp"
-
-        />
 
     <RelativeLayout
         android:layout_width="wrap_content"
@@ -163,28 +154,28 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/notosans_regular"
-                android:text="시간"
+                android:text=" 시 간 "
                 android:textSize="15dp"
                 android:paddingRight="30dp"/>
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/notosans_regular"
-                android:text="날씨"
+                android:text=" 날 씨 "
                 android:textSize="15dp"
                 android:paddingRight="30dp"/>
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/notosans_regular"
-                android:text="강수 형태"
+                android:text=" 습 도 "
                 android:textSize="15dp"
                 android:paddingRight="30dp"/>
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/notosans_regular"
-                android:text="강수 확률"
+                android:text=" 풍 속 "
                 android:textSize="15dp"
                 android:paddingRight="30dp"/>
             <TextView
@@ -192,7 +183,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/notosans_regular"
-                android:text="기온"
+                android:text=" 기 온 "
                 android:textSize="15dp"
                 android:paddingRight="30dp"/>
 
@@ -211,7 +202,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="02"
+                android:text=" 02"
                 android:textSize="15dp"
                 android:paddingRight="30dp"/>
             <ImageView
@@ -224,13 +215,13 @@
 
 
             <TextView
-                android:id="@+id/tvRainType"
+                android:id="@+id/tvHumidity"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text=""
                 android:textSize="15dp"/>
             <TextView
-                android:id="@+id/tvRainRatio"
+                android:id="@+id/tvWind"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text=""
@@ -255,7 +246,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="05"
+                android:text=" 05"
                 android:textSize="15dp"
                 android:paddingRight="30dp"/>
             <ImageView
@@ -268,13 +259,13 @@
 
 
             <TextView
-                android:id="@+id/tvRainType05"
+                android:id="@+id/tvHumidity05"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text=""
                 android:textSize="15dp"/>
             <TextView
-                android:id="@+id/tvRainRatio05"
+                android:id="@+id/tvWind05"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text=""
@@ -299,7 +290,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="08"
+                android:text=" 08"
                 android:textSize="15dp"
                 android:paddingRight="30dp"/>
             <ImageView
@@ -312,13 +303,13 @@
 
 
             <TextView
-                android:id="@+id/tvRainType08"
+                android:id="@+id/tvHumidity08"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text=""
                 android:textSize="15dp"/>
             <TextView
-                android:id="@+id/tvRainRatio08"
+                android:id="@+id/tvWind08"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text=""
@@ -343,7 +334,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="11"
+                android:text=" 11"
                 android:textSize="15dp"
                 android:paddingRight="30dp"/>
             <ImageView
@@ -356,13 +347,13 @@
 
 
             <TextView
-                android:id="@+id/tvRainType11"
+                android:id="@+id/tvHumidity11"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text=""
                 android:textSize="15dp"/>
             <TextView
-                android:id="@+id/tvRainRatio11"
+                android:id="@+id/tvWind11"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text=""
@@ -387,7 +378,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="14"
+                android:text=" 14"
                 android:textSize="15dp"
                 android:paddingRight="30dp"/>
             <ImageView
@@ -400,13 +391,13 @@
 
 
             <TextView
-                android:id="@+id/tvRainType14"
+                android:id="@+id/tvHumidity14"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text=""
                 android:textSize="15dp"/>
             <TextView
-                android:id="@+id/tvRainRatio14"
+                android:id="@+id/tvWind14"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text=""
@@ -431,7 +422,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="17"
+                android:text=" 17"
                 android:textSize="15dp"
                 android:paddingRight="30dp"/>
             <ImageView
@@ -444,13 +435,13 @@
 
 
             <TextView
-                android:id="@+id/tvRainType17"
+                android:id="@+id/tvHumidity17"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text=""
                 android:textSize="15dp"/>
             <TextView
-                android:id="@+id/tvRainRatio17"
+                android:id="@+id/tvWind17"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text=""
@@ -475,7 +466,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="20"
+                android:text=" 20"
                 android:textSize="15dp"
                 android:paddingRight="30dp"/>
             <ImageView
@@ -488,13 +479,13 @@
 
 
             <TextView
-                android:id="@+id/tvRainType20"
+                android:id="@+id/tvHumidity20"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text=""
                 android:textSize="15dp"/>
             <TextView
-                android:id="@+id/tvRainRatio20"
+                android:id="@+id/tvWind20"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text=""
@@ -519,7 +510,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="23"
+                android:text=" 23"
                 android:textSize="15dp"
                 android:paddingRight="30dp"/>
             <ImageView
@@ -532,13 +523,13 @@
 
 
             <TextView
-                android:id="@+id/tvRainType23"
+                android:id="@+id/tvHumidity23"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text=""
                 android:textSize="15dp"/>
             <TextView
-                android:id="@+id/tvRainRatio23"
+                android:id="@+id/tvWind23"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text=""
@@ -603,11 +594,12 @@
 
 
     <TextView
-        android:id="@+id/tvHumidity"
+        android:id="@+id/tvHumidityNo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text=""
         android:textSize="20dp"/>
+
 
 
 </LinearLayout>
