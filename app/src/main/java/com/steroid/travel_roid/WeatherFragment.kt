@@ -52,47 +52,21 @@ class WeatherFragment : Fragment() {
     lateinit var geocoder: Geocoder
 
     lateinit var tvWind : TextView     // 풍속
-    lateinit var tvWind05 : TextView
-    lateinit var tvWind08 : TextView
-    lateinit var tvWind11 : TextView
-    lateinit var tvWind14 : TextView
-    lateinit var tvWind17 : TextView
-    lateinit var tvWind20: TextView
-    lateinit var tvWind23 : TextView
 
-    lateinit var tvHumidity : TextView      // 강수 형태
-    lateinit var tvHumidity05 : TextView
-    lateinit var tvHumidity08 : TextView
-    lateinit var tvHumidity11 : TextView
-    lateinit var tvHumidity14 : TextView
-    lateinit var tvHumidity17 : TextView
-    lateinit var tvHumidity20 : TextView
-    lateinit var tvHumidity23 : TextView
+    lateinit var tvHumidity : TextView      // 습도
+
 
     lateinit var tvHumidityNo : TextView      // 습도
     lateinit var tvSky : TextView           // 하늘 상태
     lateinit var tvTemp : TextView          // 온도
-    lateinit var tvTemp02 : TextView
-    lateinit var tvTemp05 : TextView
-    lateinit var tvTemp08 : TextView
-    lateinit var tvTemp11 : TextView
-    lateinit var tvTemp14 : TextView
-    lateinit var tvTemp17 : TextView
-    lateinit var tvTemp20 : TextView
-    lateinit var tvTemp23 : TextView
+    lateinit var tvFeel : TextView          //체감온도
+
     lateinit var tvTempHi : TextView        //최고온도
     lateinit var tvTempLo : TextView        //최저온도
-    lateinit var btnRefresh : Button        // 새로고침 버튼
-    lateinit var weather:ImageView          //날씨그림
-    lateinit var weather02:ImageView
-    lateinit var weather05:ImageView
-    lateinit var weather08:ImageView
-    lateinit var weather11:ImageView
-    lateinit var weather14:ImageView
-    lateinit var weather17:ImageView
-    lateinit var weather20:ImageView
-    lateinit var weather23:ImageView
 
+    lateinit var weather:ImageView          //날씨그림
+
+    lateinit var barometer:TextView
     lateinit var tempDress: TextView
     lateinit var dress:TextView
 
@@ -205,47 +179,23 @@ class WeatherFragment : Fragment() {
         dress = weatherview.findViewById(R.id.dress)
 
         tvWind = weatherview.findViewById(R.id.tvWind)
-        tvWind05 = weatherview.findViewById(R.id.tvWind05)
-        tvWind08 = weatherview.findViewById(R.id.tvWind08)
-        tvWind11 = weatherview.findViewById(R.id.tvWind11)
-        tvWind14 = weatherview.findViewById(R.id.tvWind14)
-        tvWind17 = weatherview.findViewById(R.id.tvWind17)
-        tvWind20 = weatherview.findViewById(R.id.tvWind20)
-        tvWind23 = weatherview.findViewById(R.id.tvWind23)
+        barometer = weatherview.findViewById(R.id.tvBarometer)
 
         tvHumidityNo = weatherview.findViewById(R.id.tvHumidityNo)
 
         tvHumidity = weatherview.findViewById(R.id.tvHumidity)
-        tvHumidity05 = weatherview.findViewById(R.id.tvHumidity05)
-        tvHumidity08 = weatherview.findViewById(R.id.tvHumidity08)
-        tvHumidity11 = weatherview.findViewById(R.id.tvHumidity11)
-        tvHumidity14 = weatherview.findViewById(R.id.tvHumidity14)
-        tvHumidity17 = weatherview.findViewById(R.id.tvHumidity17)
-        tvHumidity20 = weatherview.findViewById(R.id.tvHumidity20)
-        tvHumidity23 = weatherview.findViewById(R.id.tvHumidity23)
+
+        tvFeel = weatherview.findViewById(R.id.tvFeel)
+
 
         tvSky = weatherview.findViewById(R.id.tvSky)
         tvTemp = weatherview.findViewById(R.id.tvTemp)
-        tvTemp02 = weatherview.findViewById(R.id.tvTemp02)
-        tvTemp05 = weatherview.findViewById(R.id.tvTemp05)
-        tvTemp08 = weatherview.findViewById(R.id.tvTemp08)
-        tvTemp11 = weatherview.findViewById(R.id.tvTemp11)
-        tvTemp14 = weatherview.findViewById(R.id.tvTemp14)
-        tvTemp17 = weatherview.findViewById(R.id.tvTemp17)
-        tvTemp20 = weatherview.findViewById(R.id.tvTemp20)
-        tvTemp23 = weatherview.findViewById(R.id.tvTemp23)
+
         tvTempHi = weatherview.findViewById(R.id.tvTempHi)
         tvTempLo = weatherview.findViewById(R.id.tvTempLo)
 
         weather = weatherview.findViewById(R.id.weather)
-        weather02 = weatherview.findViewById(R.id.weather02)
-        weather05 = weatherview.findViewById(R.id.weather05)
-        weather08 = weatherview.findViewById(R.id.weather08)
-        weather11 = weatherview.findViewById(R.id.weather11)
-        weather14 = weatherview.findViewById(R.id.weather14)
-        weather17 = weatherview.findViewById(R.id.weather17)
-        weather20 = weatherview.findViewById(R.id.weather20)
-        weather23 = weatherview.findViewById(R.id.weather23)
+
 
 
 
@@ -283,43 +233,26 @@ class WeatherFragment : Fragment() {
                     var cTemp =  weatherResponse!!.main!!.temp - 273.15  //켈빈을 섭씨로 변환
                     var minTemp = weatherResponse!!.main!!.temp_min - 273.15
                     var maxTemp = weatherResponse!!.main!!.temp_max - 273.15
+                    var feel_like =weatherResponse!!.main!!.feels_like - 273.15
                     var humidity =weatherResponse!!.main!!.humidity
                     var sky= weatherResponse!!.weather!!.get(0).main
                     var wind = weatherResponse!!.wind!!.speed
-
+                    var pressure =weatherResponse!!.main!!.pressure
 
                     tvTemp.text = cTemp.toInt().toString() + "°"
                     tvTempHi.text = "최고"+maxTemp.toInt().toString()+ "°  "
                     tvTempLo.text = "최저"+minTemp.toInt().toString()+ "°"
+                    barometer.text = pressure.toString() +"hPa"
+
+                    tvFeel.text = feel_like.toInt().toString()+"°"
 
 
-
-                    tvTemp02.text = "  "+cTemp.toInt().toString() + "°"
-                    tvTemp05.text = "  "+cTemp.toInt().toString() + "°"
-                    tvTemp08.text = "  "+cTemp.toInt().toString() + "°"
-                    tvTemp11.text = "  "+cTemp.toInt().toString() + "°"
-                    tvTemp14.text = "  "+cTemp.toInt().toString() + "°"
-                    tvTemp17.text = "  "+cTemp.toInt().toString() + "°"
-                    tvTemp20.text = "  "+cTemp.toInt().toString() + "°"
-                    tvTemp23.text = "  "+cTemp.toInt().toString() + "°"
 
                     tvHumidity.text = humidity.toInt().toString()+"%"
-                    tvHumidity05.text = humidity.toInt().toString()+"%"
-                    tvHumidity08.text = humidity.toInt().toString()+"%"
-                    tvHumidity11.text = humidity.toInt().toString()+"%"
-                    tvHumidity14.text = humidity.toInt().toString()+"%"
-                    tvHumidity17.text = humidity.toInt().toString()+"%"
-                    tvHumidity20.text = humidity.toInt().toString()+"%"
-                    tvHumidity23.text = humidity.toInt().toString()+"%"
+
 
                     tvWind.text = wind.toString()+"m/s  "
-                    tvWind05.text = wind.toString()+"m/s  "
-                    tvWind08.text = wind.toString()+"m/s  "
-                    tvWind11.text = wind.toString()+"m/s  "
-                    tvWind14.text = wind.toString()+"m/s  "
-                    tvWind17.text = wind.toString()+"m/s  "
-                    tvWind20.text = wind.toString()+"m/s  "
-                    tvWind23.text = wind.toString()+"m/s  "
+
 
                     tvSky.text = sky
 
@@ -352,54 +285,7 @@ class WeatherFragment : Fragment() {
                         "4" ->  weather.setImageResource(R.drawable.cloud)
                         else -> weather.setImageResource(R.drawable.cloud)
                     }
-                    when(sky) {
-                        "1" ->  weather02.setImageResource(R.drawable.sun)
-                        "Clouds" ->  weather02.setImageResource(R.drawable.cloud)
-                        "4" ->  weather02.setImageResource(R.drawable.cloud)
-                        else -> weather.setImageResource(R.drawable.cloud)
-                    }
-                    when(sky) {
-                        "1" ->  weather05.setImageResource(R.drawable.sun)
-                        "Clouds" ->  weather05.setImageResource(R.drawable.cloud)
-                        "4" ->  weather05.setImageResource(R.drawable.cloud)
-                        else -> weather.setImageResource(R.drawable.cloud)
-                    }
-                    when(sky) {
-                        "1" ->  weather08.setImageResource(R.drawable.sun)
-                        "Clouds" ->  weather08.setImageResource(R.drawable.cloud)
-                        "4" ->  weather08.setImageResource(R.drawable.cloud)
-                        else -> weather.setImageResource(R.drawable.cloud)
-                    }
-                    when(sky) {
-                        "1" ->  weather11.setImageResource(R.drawable.sun)
-                        "Clouds" ->  weather11.setImageResource(R.drawable.cloud)
-                        "4" ->  weather11.setImageResource(R.drawable.cloud)
-                        else -> weather.setImageResource(R.drawable.cloud)
-                    }
-                    when(sky) {
-                        "1" ->  weather14.setImageResource(R.drawable.sun)
-                        "Clouds" ->  weather14.setImageResource(R.drawable.cloud)
-                        "4" ->  weather14.setImageResource(R.drawable.cloud)
-                        else -> weather.setImageResource(R.drawable.cloud)
-                    }
-                    when(sky) {
-                        "1" ->  weather17.setImageResource(R.drawable.sun)
-                        "Clouds" ->  weather17.setImageResource(R.drawable.cloud)
-                        "4" ->  weather17.setImageResource(R.drawable.cloud)
-                        else -> weather.setImageResource(R.drawable.cloud)
-                    }
-                    when(sky) {
-                        "1" ->  weather20.setImageResource(R.drawable.sun)
-                        "Clouds" ->  weather20.setImageResource(R.drawable.cloud)
-                        "4" ->  weather20.setImageResource(R.drawable.cloud)
-                        else -> weather.setImageResource(R.drawable.cloud)
-                    }
-                    when(sky) {
-                        "1" ->  weather23.setImageResource(R.drawable.sun)
-                        "Clouds" ->  weather23.setImageResource(R.drawable.cloud)
-                        "4" ->  weather23.setImageResource(R.drawable.cloud)
-                        else -> weather.setImageResource(R.drawable.cloud)
-                    }
+
 
 
                 }
@@ -457,6 +343,8 @@ class Main {
     @SerializedName("pressure")
     var pressure: Float = 0.toFloat()
     @SerializedName("temp_min")
+    var feels_like: Float = 0.toFloat()
+    @SerializedName("feels_like")
     var temp_min: Float = 0.toFloat()
     @SerializedName("temp_max")
     var temp_max: Float = 0.toFloat()
