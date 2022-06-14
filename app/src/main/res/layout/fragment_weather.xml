@@ -6,6 +6,7 @@
     tools:context=".WeatherFragment"
     android:background="@drawable/background"
     android:orientation="vertical">
+    
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="50dp">
@@ -25,17 +26,7 @@
     </RelativeLayout>
 
 
-    <ImageButton
-        android:id="@+id/button"
 
-        android:background="@drawable/update2"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:layout_gravity="right"
-        android:layout_marginRight="25dp"
-        android:layout_marginTop="10dp"
-
-        />
 
     <RelativeLayout
         android:layout_width="wrap_content"
@@ -91,11 +82,12 @@
         android:fontFamily="@font/notosans_bold"
         android:layout_toRightOf="@id/tvTempHi"
         android:layout_below="@+id/tvTemp"/>
+
         <ImageView
             android:id="@+id/weather"
             android:layout_width="100dp"
             android:layout_height="100dp"
-
+            android:layout_marginTop="10dp"
             android:layout_alignParentRight="true"
             android:layout_marginRight="60dp"/>
         <TextView
@@ -143,418 +135,184 @@
         android:text=""
         android:textSize="18sp"
         />
-
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="시간별 일기예보"
-        android:fontFamily="@font/notosans_bold"
-        android:textSize="20dp"
-        android:layout_marginLeft="30dp"/>
-
     <TableLayout
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_marginLeft="30dp">
-        <TableRow>
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/notosans_regular"
-                android:text="시간"
-                android:textSize="15dp"
-                android:paddingRight="30dp"/>
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/notosans_regular"
-                android:text="날씨"
-                android:textSize="15dp"
-                android:paddingRight="30dp"/>
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/notosans_regular"
-                android:text="강수 형태"
-                android:textSize="15dp"
-                android:paddingRight="30dp"/>
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/notosans_regular"
-                android:text="강수 확률"
-                android:textSize="15dp"
-                android:paddingRight="30dp"/>
-            <TextView
+        android:layout_marginLeft="30dp"
+        android:gravity="center">
 
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/notosans_regular"
-                android:text="기온"
-                android:textSize="15dp"
-                android:paddingRight="30dp"/>
+        <LinearLayout android:id="@+id/detailsContainer" android:layout_width="match_parent"
+            android:layout_height="wrap_content" android:orientation="vertical"
+            android:layout_alignParentBottom="true">
+        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:orientation="horizontal" android:weightSum="3">
+            <LinearLayout android:layout_width="150dp" android:layout_height="130dp"
+                android:orientation="vertical" android:layout_weight="1"
+                 android:padding="8dp"
+                android:background="#3CF1EBF1">
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+                    <ImageView
+                        android:layout_marginTop="10dp"
+                        android:layout_width="25dp"
+                        android:layout_height="25dp"
+                        android:src="@drawable/humidity" />
+                    <Space android:layout_width="5dp" android:layout_height="5dp"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/notosans_bold"
+                        android:textSize="15dp"
+                        android:text="습도"/>
 
-        </TableRow>
-        <TableRow>
-            <View
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+                    <TextView
+                        android:id="@+id/tvHumidity"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/notosans_bold"
+                        android:textSize="17dp"
+                        android:text="0%"/>
+                </LinearLayout>
+            </LinearLayout>
+            <Space android:layout_width="20dp" android:layout_height="wrap_content"/>
+            <LinearLayout android:layout_width="150dp" android:layout_height="130dp"
+                android:orientation="vertical" android:layout_weight="1"
+                 android:padding="8dp"
+                android:background="#3CF1EBF1">
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+                <ImageView
+                    android:layout_marginTop="10dp"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:src="@drawable/windy" />
+                <Space android:layout_width="5dp" android:layout_height="5dp"/>
 
-                android:background="@color/white"
-                android:layout_width="match_parent"
-                android:layout_span="5"
-                android:layout_height="2px"/>
-        </TableRow>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/notosans_bold"
+                    android:textSize="15dp"
+                    android:text="풍속"/>
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+                <TextView
+                    android:id="@+id/tvWind"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/notosans_bold"
+                    android:textSize="17dp"
+                    android:text="0m/s"/>
+                </LinearLayout>
+            </LinearLayout>
+            <Space android:layout_width="10dp" android:layout_height="wrap_content"/>
 
-        <TableRow
-            android:layout_marginTop="10dp">
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="02"
-                android:textSize="15dp"
-                android:paddingRight="30dp"/>
-            <ImageView
-                android:id="@+id/weather02"
-                android:layout_width="15dp"
-                android:layout_height="15dp"
-                android:src="@drawable/cloud"
-                android:layout_marginRight="40dp"
-                />
-
-
-            <TextView
-                android:id="@+id/tvRainType"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text=""
-                android:textSize="15dp"/>
-            <TextView
-                android:id="@+id/tvRainRatio"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text=""
-                android:textSize="15dp"/>
-            <TextView
-                android:id="@+id/tvTemp02"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="15dp"/>
-
-        </TableRow>
-        <TableRow>
-            <View
-                android:layout_marginTop="5dp"
-                android:background="@color/white"
-                android:layout_width="match_parent"
-                android:layout_span="5"
-                android:layout_height="2px"/>
-        </TableRow>
-        <TableRow
-            android:layout_marginTop="10dp">
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="05"
-                android:textSize="15dp"
-                android:paddingRight="30dp"/>
-            <ImageView
-                android:id="@+id/weather05"
-                android:layout_width="15dp"
-                android:layout_height="15dp"
-                android:src="@drawable/cloud"
-                android:layout_marginRight="40dp"
-                />
-
-
-            <TextView
-                android:id="@+id/tvRainType05"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text=""
-                android:textSize="15dp"/>
-            <TextView
-                android:id="@+id/tvRainRatio05"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text=""
-                android:textSize="15dp"/>
-            <TextView
-                android:id="@+id/tvTemp05"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="15dp"/>
-
-        </TableRow>
-        <TableRow>
-            <View
-                android:layout_marginTop="5dp"
-                android:background="@color/white"
-                android:layout_width="match_parent"
-                android:layout_span="5"
-                android:layout_height="2px"/>
-        </TableRow>
-        <TableRow
-            android:layout_marginTop="10dp">
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="08"
-                android:textSize="15dp"
-                android:paddingRight="30dp"/>
-            <ImageView
-                android:id="@+id/weather08"
-                android:layout_width="15dp"
-                android:layout_height="15dp"
-                android:src="@drawable/cloud"
-                android:layout_marginRight="40dp"
-                />
-
-
-            <TextView
-                android:id="@+id/tvRainType08"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text=""
-                android:textSize="15dp"/>
-            <TextView
-                android:id="@+id/tvRainRatio08"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text=""
-                android:textSize="15dp"/>
-            <TextView
-                android:id="@+id/tvTemp08"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="15dp"/>
-
-        </TableRow>
-        <TableRow>
-            <View
-                android:layout_marginTop="5dp"
-                android:background="@color/white"
-                android:layout_width="match_parent"
-                android:layout_span="5"
-                android:layout_height="2px"/>
-        </TableRow>
-        <TableRow
-            android:layout_marginTop="10dp">
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="11"
-                android:textSize="15dp"
-                android:paddingRight="30dp"/>
-            <ImageView
-                android:id="@+id/weather11"
-                android:layout_width="15dp"
-                android:layout_height="15dp"
-                android:src="@drawable/cloud"
-                android:layout_marginRight="40dp"
-                />
-
-
-            <TextView
-                android:id="@+id/tvRainType11"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text=""
-                android:textSize="15dp"/>
-            <TextView
-                android:id="@+id/tvRainRatio11"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text=""
-                android:textSize="15dp"/>
-            <TextView
-                android:id="@+id/tvTemp11"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="15dp"/>
-
-        </TableRow>
-        <TableRow>
-            <View
-                android:layout_marginTop="5dp"
-                android:background="@color/white"
-                android:layout_width="match_parent"
-                android:layout_span="5"
-                android:layout_height="2px"/>
-        </TableRow>
-        <TableRow
-            android:layout_marginTop="10dp">
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="14"
-                android:textSize="15dp"
-                android:paddingRight="30dp"/>
-            <ImageView
-                android:id="@+id/weather14"
-                android:layout_width="15dp"
-                android:layout_height="15dp"
-                android:src="@drawable/cloud"
-                android:layout_marginRight="40dp"
-                />
-
-
-            <TextView
-                android:id="@+id/tvRainType14"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text=""
-                android:textSize="15dp"/>
-            <TextView
-                android:id="@+id/tvRainRatio14"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text=""
-                android:textSize="15dp"/>
-            <TextView
-                android:id="@+id/tvTemp14"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="15dp"/>
-
-        </TableRow>
-        <TableRow>
-            <View
-                android:layout_marginTop="5dp"
-                android:background="@color/white"
-                android:layout_width="match_parent"
-                android:layout_span="5"
-                android:layout_height="2px"/>
-        </TableRow>
-        <TableRow
-            android:layout_marginTop="10dp">
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="17"
-                android:textSize="15dp"
-                android:paddingRight="30dp"/>
-            <ImageView
-                android:id="@+id/weather17"
-                android:layout_width="15dp"
-                android:layout_height="15dp"
-                android:src="@drawable/cloud"
-                android:layout_marginRight="40dp"
-                />
-
-
-            <TextView
-                android:id="@+id/tvRainType17"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text=""
-                android:textSize="15dp"/>
-            <TextView
-                android:id="@+id/tvRainRatio17"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text=""
-                android:textSize="15dp"/>
-            <TextView
-                android:id="@+id/tvTemp17"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="15dp"/>
-
-        </TableRow>
-        <TableRow>
-            <View
-                android:layout_marginTop="5dp"
-                android:background="@color/white"
-                android:layout_width="match_parent"
-                android:layout_span="5"
-                android:layout_height="2px"/>
-        </TableRow>
-        <TableRow
-            android:layout_marginTop="10dp">
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="20"
-                android:textSize="15dp"
-                android:paddingRight="30dp"/>
-            <ImageView
-                android:id="@+id/weather20"
-                android:layout_width="15dp"
-                android:layout_height="15dp"
-                android:src="@drawable/cloud"
-                android:layout_marginRight="40dp"
-                />
-
-
-            <TextView
-                android:id="@+id/tvRainType20"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text=""
-                android:textSize="15dp"/>
-            <TextView
-                android:id="@+id/tvRainRatio20"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text=""
-                android:textSize="15dp"/>
-            <TextView
-                android:id="@+id/tvTemp20"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="15dp"/>
-
-        </TableRow>
-        <TableRow>
-            <View
-                android:layout_marginTop="5dp"
-                android:background="@color/white"
-                android:layout_width="match_parent"
-                android:layout_span="5"
-                android:layout_height="2px"/>
-        </TableRow>
-        <TableRow
-            android:layout_marginTop="10dp">
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="23"
-                android:textSize="15dp"
-                android:paddingRight="30dp"/>
-            <ImageView
-                android:id="@+id/weather23"
-                android:layout_width="15dp"
-                android:layout_height="15dp"
-                android:src="@drawable/cloud"
-                android:layout_marginRight="40dp"
-                />
-
-
-            <TextView
-                android:id="@+id/tvRainType23"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text=""
-                android:textSize="15dp"/>
-            <TextView
-                android:id="@+id/tvRainRatio23"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text=""
-                android:textSize="15dp"/>
-            <TextView
-                android:id="@+id/tvTemp23"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="15dp"/>
-
-        </TableRow>
+        </LinearLayout>
+        </LinearLayout>
 
 
 
 
     </TableLayout>
+    <Space android:layout_width="wrap_content" android:layout_height="20dp"/>
+    <TableLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="30dp"
+        android:gravity="center">
+
+        <LinearLayout android:id="@+id/detailsContainer2" android:layout_width="match_parent"
+            android:layout_height="wrap_content" android:orientation="vertical"
+            android:layout_alignParentBottom="true">
+            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:orientation="horizontal" android:weightSum="3">
+                <LinearLayout android:layout_width="150dp" android:layout_height="130dp"
+                    android:orientation="vertical" android:layout_weight="1"
+                     android:padding="8dp"
+                    android:background="#3CF1EBF1">
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+                    <ImageView
+                        android:layout_marginTop="10dp"
+                        android:layout_width="25dp"
+                        android:layout_height="25dp"
+                        android:src="@drawable/barometer" />
+                    <Space android:layout_width="5dp" android:layout_height="5dp"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/notosans_bold"
+                        android:textSize="15dp"
+                        android:text="기압"/>
+                    </LinearLayout>
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content">
+                    <TextView
+                        android:id="@+id/tvBarometer"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/notosans_bold"
+                        android:textSize="17dp"
+                        android:text="0hPa"/>
+                        </LinearLayout>
+                </LinearLayout>
+                <Space android:layout_width="20dp" android:layout_height="wrap_content"/>
+                <LinearLayout android:layout_width="150dp" android:layout_height="130dp"
+                    android:orientation="vertical" android:layout_weight="1"
+                     android:padding="8dp"
+                    android:background="#3CF1EBF1">
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+                    <ImageView
+                        android:layout_marginTop="10dp"
+                        android:layout_width="25dp"
+                        android:layout_height="25dp"
+                        android:src="@drawable/temperaturelow" />
+                    <Space android:layout_width="5dp" android:layout_height="5dp"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/notosans_bold"
+                        android:textSize="15dp"
+                        android:text="체감온도"/>
+                    </LinearLayout>
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content">
+                    <TextView
+                        android:id="@+id/tvFeel"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/notosans_bold"
+                        android:textSize="17dp"
+                        android:text="0°"/>
+                    </LinearLayout>
+                </LinearLayout>
+                <Space android:layout_width="10dp" android:layout_height="wrap_content"/>
+
+            </LinearLayout>
+        </LinearLayout>
+
+
+
+
+    </TableLayout>
+
     <TableLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -603,11 +361,12 @@
 
 
     <TextView
-        android:id="@+id/tvHumidity"
+        android:id="@+id/tvHumidityNo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text=""
         android:textSize="20dp"/>
+
 
 
 </LinearLayout>
