@@ -14,6 +14,7 @@ import com.kakao.sdk.user.UserApiClient
 var email: String? = ""
 var name: String? = ""
 var profile_Src: String? = ""
+
 class LoginActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

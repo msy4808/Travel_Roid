@@ -20,8 +20,6 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 
-
-
 class LocationActivity : AppCompatActivity() {
 
     private var mFusedLocationProviderClient: FusedLocationProviderClient? = null // 현재 위치를 가져오기 위한 변수

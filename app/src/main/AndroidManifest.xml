@@ -49,8 +49,13 @@
         <activity
             android:name=".LoginActivity"
             android:exported="true"/>
+
+        <!-- android:windowSoftInputMode="adjustResize"
+        키보드가 디스플레이되면 화면을 밀어줌(키보드에 안가려지게) -->
+
         <activity
             android:name=".MainActivity"
+            android:windowSoftInputMode="adjustResize"
             android:exported="true" />
         <activity
             android:name=".LocationActivity"

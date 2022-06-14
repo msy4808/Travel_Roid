@@ -17,6 +17,7 @@ import java.util.*
 
 
 class HomeFragment : Fragment() {
+
     var langCode = ""
     var autoLangCode = ""
     var response_Text = ""
@@ -50,6 +51,7 @@ class HomeFragment : Fragment() {
             userEnterText.setText(imageText)
             postText(userEnterText.text)
         }
+
         handler = object:Handler(Looper.getMainLooper()){ //감지된 언어코드로 Spinner를 변경해주기 위해 핸들러 사용
             override fun handleMessage(msg: Message) {
                 when (msg.what) {
