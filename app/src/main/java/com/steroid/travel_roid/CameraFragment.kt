@@ -47,7 +47,7 @@ import com.google.mlkit.vision.text.korean.KoreanTextRecognizerOptions
 
 var imageText:String = ""
 
-class CameraFragment : Fragment() {
+class CameraFragment : Fragment() { //카메라 X를 이용한 클래스
 
     private var imageCapture: ImageCapture? = null
 
@@ -119,6 +119,7 @@ class CameraFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        //변수값을 초기화 시켜줌
         val view = inflater.inflate(R.layout.fragment_camera, container, false)
         val flash_Btn: ImageButton = view.findViewById(R.id.flash_Btn)
         previewView = view.findViewById(R.id.preview_View)
@@ -146,7 +147,7 @@ class CameraFragment : Fragment() {
         return view
     }
 
-    private fun getOutputDirectory(): File {
+    private fun getOutputDirectory(): File { //저장소 연결
         val mediaDir = (activity as MainActivity).externalMediaDirs.firstOrNull()?.let {
             File(it, resources.getString(R.string.app_name)).apply { mkdirs() }
         }
@@ -155,7 +156,7 @@ class CameraFragment : Fragment() {
             mediaDir else filesDir
     }
 
-    private fun openCamera() {
+    private fun openCamera() { //카메라 실행 메서드
         val cameraProviderFuture =
             ProcessCameraProvider.getInstance((activity as MainActivity).applicationContext)
 
@@ -185,10 +186,10 @@ class CameraFragment : Fragment() {
 
     }
 
-    private fun savePhoto() {
+    private fun savePhoto() { //사진 저장 메서드
         imageCapture = imageCapture ?: return
 
-        val photoFile = File(
+        val photoFile = File( //저장 형식(폼) 지정
             outputDirectory,
             SimpleDateFormat("yy-mm-dd", Locale.US).format(System.currentTimeMillis()) + ".png"
         )
@@ -199,7 +200,7 @@ class CameraFragment : Fragment() {
             ContextCompat.getMainExecutor((activity as MainActivity).applicationContext),
             object : ImageCapture.OnImageSavedCallback {
                 override fun onImageSaved(outputFileResults: ImageCapture.OutputFileResults) {
-                    savedUri = Uri.fromFile(photoFile)
+                    savedUri = Uri.fromFile(photoFile)//저장된 사진의 uri를 이용해 사진의 uri값을 저장
                     showCaptureImage()
                     runTextRecognition()
                 }
@@ -212,7 +213,7 @@ class CameraFragment : Fragment() {
     }
 
 
-    private fun runTextRecognition() {
+    private fun runTextRecognition() { //저장된 사진을 불러와서 텍스트가 있다면 텍스트 추출 메서드로 넘겨줌
         image = InputImage.fromFilePath((activity as MainActivity).applicationContext, savedUri!!)
         koreanrecognizer.process(image)
             .addOnSuccessListener(
@@ -225,7 +226,7 @@ class CameraFragment : Fragment() {
                 })
     }
 
-    private fun processTextRecognitionResult(texts: Text) {
+    private fun processTextRecognitionResult(texts: Text) { //텍스트를 추출하는 메서드
         val blocks: List<Text.TextBlock> = texts.getTextBlocks()
         Log.d("텍스트", "${blocks}")
         if (blocks.size == 0) {
@@ -254,7 +255,7 @@ class CameraFragment : Fragment() {
 
     }
 
-    private fun showCaptureImage(): Boolean {
+    private fun showCaptureImage(): Boolean { // 촬영한 사진을 화면에 보여줌
         if (frameLayoutPreview.visibility == View.GONE) {
             frameLayoutPreview.visibility = View.VISIBLE
             imageViewPreview.setImageURI(savedUri)

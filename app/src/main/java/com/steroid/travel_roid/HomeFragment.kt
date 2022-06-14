@@ -18,6 +18,7 @@ import java.util.*
 
 class HomeFragment : Fragment() {
 
+    //전역변수 지정
     var langCode = ""
     var autoLangCode = ""
     var response_Text = ""
@@ -35,7 +36,8 @@ class HomeFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val view = inflater.inflate(R.layout.fragment_home, container, false)
+        //변수를 초기화
+        val view = inflater.inflate(R.layout.fragment_home, container, false) //view를 선언 후 view를 참조해서 ID값 매핑
         val copyIn: ImageButton = view.findViewById(R.id.input_copy)
         val copyResult: ImageButton = view.findViewById(R.id.result_copy)
         var tts: TextToSpeech? = null
@@ -48,13 +50,13 @@ class HomeFragment : Fragment() {
         outSpinner= view.findViewById(R.id.langTag) //spinner 메뉴
         targetSpinner= view.findViewById(R.id.langTag2)
         if(!(imageText == "")){ //사진에서 텍스트 추출한 내용이 있을경우 내용을 붙여줌
-            userEnterText.setText(imageText)
-            postText(userEnterText.text)
+            userEnterText.setText(imageText) //InPut 텍스트를 사진에서 추출한 텍스트로 변경
+            postText(userEnterText.text) // 해당 텍스트 번역 메서드로 저달
         }
 
         handler = object:Handler(Looper.getMainLooper()){ //감지된 언어코드로 Spinner를 변경해주기 위해 핸들러 사용
             override fun handleMessage(msg: Message) {
-                when (msg.what) {
+                when (msg.what) { //받아온 msg에 따라 Spinner 변경
                     0 -> {
                         outSpinner.setSelection(0)
                     }
@@ -116,21 +118,21 @@ class HomeFragment : Fragment() {
                 }
             }
         }
-        user_Btn.setOnClickListener {
+        user_Btn.setOnClickListener { //마이페이지 버튼 이벤트
             val intent:Intent = Intent((activity as MainActivity).applicationContext, MypageActivity::class.java)
             startActivity(intent)
         }
 
-        tts = TextToSpeech(context) {
+        tts = TextToSpeech(context) { //TTS (텍스트 읽기 기능) 언어 세팅
             if(it == TextToSpeech.SUCCESS) {
                 tts?.setLanguage(Locale.KOREAN) //사용언어 초기화
             }
         }
-        ttsIn_Btn.setOnClickListener {
-            tts.speak(userEnterText.text,TextToSpeech.QUEUE_FLUSH,null,null)
+        ttsIn_Btn.setOnClickListener { //InPut 텍스트 TTS 버튼 이벤트
+            tts.speak(userEnterText.text,TextToSpeech.QUEUE_FLUSH,null,null) //읽어줄 데이터(텍스트) 넘겨주기
         }
-        ttsResult_Btn.setOnClickListener {
-            tts.speak(result.text,TextToSpeech.QUEUE_FLUSH,null,null)
+        ttsResult_Btn.setOnClickListener { //Result 텍스트 TTS 버튼 이벤트
+            tts.speak(result.text,TextToSpeech.QUEUE_FLUSH,null,null) //읽어줄 데이터(텍스트) 넘겨주기
         }
 
         copyIn.setOnClickListener { //텍스트 클립보드에 복사기능
@@ -167,7 +169,7 @@ class HomeFragment : Fragment() {
         //spinner 리스너 설정
         outSpinner.onItemSelectedListener = object: AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) { //감지가 아니라 직접 선택해도 전달되게 ... 우선 만들어놈
-                when(position) {
+                when(position) { //Spinner에서 선택된 메뉴에 따라 언어코드값을 저장
                     0 -> {
                         autoLangCode = "ko"
                     }
@@ -231,9 +233,9 @@ class HomeFragment : Fragment() {
         }
 
         targetSpinner.onItemSelectedListener = object: AdapterView.OnItemSelectedListener {
-            //Spinner에서 선택한 target 언어코드를 langCode에 저장하는 코드
+            //spinner 리스너 설정
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                when(position) {
+                when(position) { //Spinner에서 선택한 target 언어코드를 langCode에 저장하는 코드
                     0 -> {
                         langCode = "ko"
                     }
@@ -290,18 +292,18 @@ class HomeFragment : Fragment() {
             }
 
             override fun afterTextChanged(p0: Editable?) { //텍스트가 입력되면 동작함 <- 입력된 텍스트를 String으로 받아 DetectLangs클래스로 넘겨줌
-                postText(p0)
+                postText(p0) //번약 메서드 실행
             }
         }
         userEnterText.addTextChangedListener(textWatcher) //editText에텍스트가 입력되면 동작하는 리스너를 연결
         return view
     }
-    private fun postText(text: Editable?){
+    private fun postText(text: Editable?){ //텍스트를 받아서 TranslateTask 클래스로 넘겨줌(거기서 번역 실행)
         val timer = Timer()
         timer.schedule(object: TimerTask(){
             override fun run() {
-                val detectLangs = DetectLangs(text.toString())
-                autoLangCode = detectLangs.getlangCode()
+                val detectLangs = DetectLangs(text.toString()) //입력된 텍스트를 전달해 언어코드 감지
+                autoLangCode = detectLangs.getlangCode() //감지된 언어코드를 저장
                 when(autoLangCode){ //감지된 언어코드에 따라 핸들러에 msg로 넘겨줌
                     "ko" -> {
                         handler.sendEmptyMessage(0)
@@ -359,7 +361,7 @@ class HomeFragment : Fragment() {
                     }
                 }
                 val translate = TranslateTask(userEnterText.text.toString(), autoLangCode, langCode) //텍스트와 두가지의 언어코드를 파라미터로 보냄
-                response_Text = translate.execute().get()
+                response_Text = translate.execute().get() //결과값 저장
                 handler.sendEmptyMessage(99)
             }
         },1000)
